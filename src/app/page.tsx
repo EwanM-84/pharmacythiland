@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Truck, Clock, Shield, ChevronRight, Zap, Star, Tag, Package,
@@ -43,11 +44,12 @@ export default function HomePage() {
         <div className="min-h-screen" style={{ background: "var(--color-surface-secondary)" }}>
 
           {/* ── Hero ── */}
-          <section className="relative overflow-hidden"
-            style={{ background: "linear-gradient(135deg, var(--color-primary-900) 0%, var(--color-primary-700) 55%, var(--color-primary-500) 100%)" }}>
-            <div className="absolute top-0 right-0 w-[700px] h-[700px] rounded-full opacity-10 bg-white -translate-y-1/2 translate-x-1/4 pointer-events-none" />
-            <div className="absolute bottom-0 left-1/3 w-96 h-96 rounded-full opacity-5 bg-white translate-y-1/2 pointer-events-none" />
-            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-16 sm:py-22 lg:py-28 relative">
+          <section className="relative overflow-hidden">
+            {/* Background photo */}
+            <Image src="/header.png" alt="" fill className="object-cover object-center" priority />
+            {/* Dark overlay for text legibility */}
+            <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(10,37,64,0.82) 0%, rgba(10,37,64,0.55) 60%, rgba(10,37,64,0.15) 100%)" }} />
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-36 relative z-10" style={{ minHeight: "420px" }}>
               <div className="max-w-2xl">
                 <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-5 text-xs font-bold uppercase tracking-widest"
                   style={{ background: "rgba(255,216,20,0.15)", color: "#FFD814", border: "1px solid rgba(255,216,20,0.3)" }}>
