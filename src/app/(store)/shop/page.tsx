@@ -4,7 +4,7 @@ import { ProductCard } from "@/components/store/ProductCard";
 import { ProductCardSkeleton } from "@/components/ui/skeleton";
 import { mockProducts, mockCategories, searchProducts, getProductsByCategory } from "@/lib/mock-products";
 import type { Product } from "@/types";
-import { SlidersHorizontal, ChevronRight } from "lucide-react";
+import { SlidersHorizontal, ChevronRight, Search } from "lucide-react";
 
 interface SearchParams { q?: string; category?: string; sort?: string; prescription?: string; min?: string; max?: string; }
 
@@ -38,23 +38,30 @@ function ShopContent({ params }: { params: SearchParams }) {
       {/* Sidebar */}
       <aside className="hidden lg:flex flex-col gap-4 w-52 shrink-0">
         {/* Categories */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="px-4 py-3 border-b border-gray-100">
-            <h3 className="font-bold text-sm text-gray-900">Department</h3>
+        <div className="rounded-xl overflow-hidden"
+          style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", boxShadow: "var(--shadow-card)" }}>
+          <div className="px-4 py-3" style={{ borderBottom: "1px solid var(--color-border)" }}>
+            <h3 className="font-bold text-sm" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>Department</h3>
           </div>
           <ul className="py-2">
             <li>
               <Link href="/shop"
-                className={`block px-4 py-1.5 text-sm transition-colors ${!params.category ? "font-bold text-blue-700" : "text-gray-700 hover:text-blue-600"}`}>
+                className="block px-4 py-1.5 text-sm transition-colors"
+                style={{ color: !params.category ? "var(--color-primary-700)" : "var(--color-text-secondary)", fontWeight: !params.category ? 700 : 400 }}>
                 All Products
               </Link>
             </li>
             {mockCategories.map((cat) => (
               <li key={cat.id}>
                 <Link href={`/shop/${cat.slug}`}
-                  className={`block px-4 py-1.5 text-sm transition-colors flex items-center justify-between group ${params.category === cat.slug ? "font-bold text-blue-700 bg-blue-50" : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"}`}>
+                  className="flex items-center justify-between px-4 py-1.5 text-sm transition-colors group"
+                  style={{
+                    color: params.category === cat.slug ? "var(--color-primary-700)" : "var(--color-text-secondary)",
+                    fontWeight: params.category === cat.slug ? 700 : 400,
+                    background: params.category === cat.slug ? "var(--color-primary-50)" : "transparent",
+                  }}>
                   {cat.name}
-                  <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "var(--color-primary-500)" }} />
                 </Link>
               </li>
             ))}
@@ -62,35 +69,40 @@ function ShopContent({ params }: { params: SearchParams }) {
         </div>
 
         {/* Price filter */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <h3 className="font-bold text-sm text-gray-900 mb-3">Price Range</h3>
+        <div className="rounded-xl p-4"
+          style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", boxShadow: "var(--shadow-card)" }}>
+          <h3 className="font-bold text-sm mb-3" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>Price Range</h3>
           <div className="flex gap-2">
             <input type="number" placeholder="Min ฿" defaultValue={params.min}
-              className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-lg outline-none focus:border-blue-400" />
+              className="w-full px-2 py-1.5 text-xs rounded-lg outline-none transition-all"
+              style={{ border: "1.5px solid var(--color-border)", background: "var(--color-surface-secondary)", color: "var(--color-text)", fontFamily: "var(--font-sans)" }} />
             <input type="number" placeholder="Max ฿" defaultValue={params.max}
-              className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-lg outline-none focus:border-blue-400" />
+              className="w-full px-2 py-1.5 text-xs rounded-lg outline-none transition-all"
+              style={{ border: "1.5px solid var(--color-border)", background: "var(--color-surface-secondary)", color: "var(--color-text)", fontFamily: "var(--font-sans)" }} />
           </div>
         </div>
 
         {/* Type */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <h3 className="font-bold text-sm text-gray-900 mb-3">Product Type</h3>
-          <label className="flex items-center gap-2 text-sm cursor-pointer text-gray-700 hover:text-blue-700">
-            <input type="checkbox" className="w-4 h-4 accent-blue-600" defaultChecked={params.prescription === "true"} />
+        <div className="rounded-xl p-4"
+          style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", boxShadow: "var(--shadow-card)" }}>
+          <h3 className="font-bold text-sm mb-3" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>Product Type</h3>
+          <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: "var(--color-text-secondary)" }}>
+            <input type="checkbox" className="w-4 h-4" style={{ accentColor: "var(--color-primary-600)" }} defaultChecked={params.prescription === "true"} />
             Prescription Required
           </label>
-          <label className="flex items-center gap-2 text-sm cursor-pointer text-gray-700 hover:text-blue-700 mt-2">
-            <input type="checkbox" className="w-4 h-4 accent-blue-600" />
+          <label className="flex items-center gap-2 text-sm cursor-pointer mt-2" style={{ color: "var(--color-text-secondary)" }}>
+            <input type="checkbox" className="w-4 h-4" style={{ accentColor: "var(--color-primary-600)" }} />
             In Stock Only
           </label>
         </div>
 
         {/* Rating filter */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <h3 className="font-bold text-sm text-gray-900 mb-3">Avg. Customer Review</h3>
+        <div className="rounded-xl p-4"
+          style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", boxShadow: "var(--shadow-card)" }}>
+          <h3 className="font-bold text-sm mb-3" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>Avg. Customer Review</h3>
           {[4, 3, 2, 1].map((stars) => (
-            <label key={stars} className="flex items-center gap-2 text-sm cursor-pointer text-gray-700 hover:text-blue-700 mb-1">
-              <input type="radio" name="rating" className="accent-blue-600" />
+            <label key={stars} className="flex items-center gap-2 text-sm cursor-pointer mb-1" style={{ color: "var(--color-text-secondary)" }}>
+              <input type="radio" name="rating" style={{ accentColor: "var(--color-primary-600)" }} />
               <div className="flex">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <svg key={i} className={`w-3.5 h-3.5 ${i < stars ? "star-filled" : "star-empty"}`} viewBox="0 0 20 20" fill="currentColor">
@@ -107,18 +119,21 @@ function ShopContent({ params }: { params: SearchParams }) {
       {/* Main */}
       <div className="flex-1 min-w-0">
         {/* Toolbar */}
-        <div className="bg-white rounded-xl border border-gray-200 px-4 py-3 mb-4 flex items-center justify-between gap-3 flex-wrap">
+        <div className="rounded-xl px-4 py-3 mb-4 flex items-center justify-between gap-3 flex-wrap"
+          style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", boxShadow: "var(--shadow-card)" }}>
           <div className="flex items-center gap-2">
-            <SlidersHorizontal className="w-4 h-4 text-gray-400 lg:hidden" />
-            <p className="text-sm text-gray-600">
-              {params.q && <span>Results for <strong className="text-gray-900">&ldquo;{params.q}&rdquo;</strong> &mdash; </span>}
-              {activeCategory && <span>in <strong className="text-gray-900">{activeCategory.name}</strong> &mdash; </span>}
-              <span className="font-semibold text-gray-900">{products.length.toLocaleString()} results</span>
+            <SlidersHorizontal className="w-4 h-4 lg:hidden" style={{ color: "var(--color-text-tertiary)" }} />
+            <p className="text-sm" style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}>
+              {params.q && <span>Results for <strong style={{ color: "var(--color-text)" }}>&ldquo;{params.q}&rdquo;</strong> &mdash; </span>}
+              {activeCategory && <span>in <strong style={{ color: "var(--color-text)" }}>{activeCategory.name}</strong> &mdash; </span>}
+              <span className="font-semibold" style={{ color: "var(--color-text)" }}>{products.length.toLocaleString()} results</span>
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600 whitespace-nowrap">Sort by:</label>
-            <select className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 outline-none focus:border-blue-400 cursor-pointer" defaultValue={params.sort ?? "default"}>
+            <label className="text-sm whitespace-nowrap" style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}>Sort by:</label>
+            <select className="text-sm rounded-lg px-3 py-1.5 outline-none cursor-pointer"
+              style={{ border: "1.5px solid var(--color-border)", background: "var(--color-surface-secondary)", color: "var(--color-text)", fontFamily: "var(--font-sans)" }}
+              defaultValue={params.sort ?? "default"}>
               <option value="default">Featured</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
@@ -130,13 +145,18 @@ function ShopContent({ params }: { params: SearchParams }) {
 
         {/* Grid */}
         {products.length === 0 ? (
-          <div className="bg-white rounded-xl border border-gray-200 p-16 flex flex-col items-center gap-4 text-center">
-            <div className="text-6xl">🔍</div>
-            <div>
-              <p className="font-bold text-gray-900 text-lg">No results found</p>
-              <p className="text-sm text-gray-500 mt-1">Try adjusting your search or removing filters</p>
+          <div className="rounded-xl p-16 flex flex-col items-center gap-4 text-center"
+            style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", boxShadow: "var(--shadow-card)" }}>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center"
+              style={{ background: "var(--color-surface-tertiary)", color: "var(--color-primary-400)" }}>
+              <Search className="w-8 h-8" />
             </div>
-            <Link href="/shop" className="px-4 py-2 rounded-lg text-white text-sm font-semibold" style={{ background: "var(--color-ios-blue)" }}>
+            <div>
+              <p className="font-bold text-lg" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>No results found</p>
+              <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>Try adjusting your search or removing filters</p>
+            </div>
+            <Link href="/shop" className="px-5 py-2.5 rounded-xl text-white text-sm font-semibold"
+              style={{ background: "var(--color-primary-600)" }}>
               View All Products
             </Link>
           </div>

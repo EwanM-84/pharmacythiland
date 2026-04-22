@@ -2,12 +2,31 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ShoppingCart, Search, User, Menu, X, MapPin, ChevronDown } from "lucide-react";
+import {
+  ShoppingCart, Search, User, Menu, X, ChevronDown,
+  Pill, Leaf, Thermometer, Sparkles, Activity, Heart,
+  Droplets, ShieldPlus, Baby, Eye, Flower2, Moon
+} from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { useRouter } from "next/navigation";
 import { mockProducts, mockCategories } from "@/lib/mock-products";
 
 const RECENT_KEY = "shc-recent";
+
+const categoryIcons: Record<string, React.ReactNode> = {
+  "pain-relief":  <Pill className="w-3.5 h-3.5" />,
+  "vitamins":     <Leaf className="w-3.5 h-3.5" />,
+  "cold-flu":     <Thermometer className="w-3.5 h-3.5" />,
+  "skincare":     <Sparkles className="w-3.5 h-3.5" />,
+  "digestion":    <Activity className="w-3.5 h-3.5" />,
+  "heart":        <Heart className="w-3.5 h-3.5" />,
+  "diabetes":     <Droplets className="w-3.5 h-3.5" />,
+  "antibiotics":  <ShieldPlus className="w-3.5 h-3.5" />,
+  "baby":         <Baby className="w-3.5 h-3.5" />,
+  "eye-ear":      <Eye className="w-3.5 h-3.5" />,
+  "allergy":      <Flower2 className="w-3.5 h-3.5" />,
+  "sleep":        <Moon className="w-3.5 h-3.5" />,
+};
 
 function getRecent(): string[] {
   if (typeof window === "undefined") return [];
@@ -29,9 +48,7 @@ export function Header() {
   const cartCount = totalItems();
 
   const results = searchQuery.length >= 2
-    ? mockProducts
-        .filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
-        .slice(0, 6)
+    ? mockProducts.filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 6)
     : [];
 
   useEffect(() => {
@@ -42,10 +59,7 @@ export function Header() {
     return () => document.removeEventListener("mousedown", outside);
   }, []);
 
-  const handleFocus = useCallback(() => {
-    setRecent(getRecent());
-    setDropdownOpen(true);
-  }, []);
+  const handleFocus = useCallback(() => { setRecent(getRecent()); setDropdownOpen(true); }, []);
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -67,171 +81,200 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40">
-      {/* ── Top bar (Amazon dark) ── */}
-      <div style={{ background: "var(--color-amazon-nav)" }}>
-        <div className="max-w-[1400px] mx-auto px-3 sm:px-4 h-14 flex items-center gap-3">
+      {/* ── Main bar ── */}
+      <div className="bg-white" style={{ boxShadow: "0 1px 0 var(--color-border)" }}>
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
+
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0 group">
-            <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-              <span className="text-white font-black text-sm">Rx</span>
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 group mr-2">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+              style={{ background: "var(--color-primary-600)" }}>
+              <span className="text-white font-bold text-sm tracking-tight" style={{ fontFamily: "var(--font-sans)" }}>Rx</span>
             </div>
-            <div className="hidden sm:block">
-              <p className="text-white font-bold text-sm leading-none tracking-tight">SAMUI PHARMACY</p>
-              <p style={{ color: "var(--color-amazon-search-btn)", fontSize: "10px" }} className="font-medium tracking-wide">KOH SAMUI</p>
+            <div className="hidden sm:block leading-none">
+              <p className="font-bold text-sm tracking-tight" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }}>
+                SAMUI HOME CLINIC
+              </p>
+              <p className="text-[10px] font-semibold tracking-[0.15em] uppercase" style={{ color: "var(--color-primary-600)" }}>
+                Pharmacy
+              </p>
             </div>
           </Link>
 
-          {/* Deliver to */}
-          <button className="hidden md:flex items-start gap-1.5 text-white/80 hover:text-white transition-colors shrink-0 group">
-            <MapPin className="w-4 h-4 mt-0.5 text-white/60 group-hover:text-white" />
-            <div className="text-left leading-none">
-              <p className="text-[10px] text-white/60">Deliver to</p>
-              <p className="text-xs font-bold text-white">Koh Samui</p>
-            </div>
-          </button>
-
-          {/* Search bar */}
-          <div ref={searchRef} className="flex-1 relative max-w-3xl">
-            <form onSubmit={submit} className="flex">
-              <select
-                className="hidden lg:block shrink-0 h-10 px-2 text-xs font-medium border-r border-gray-300 bg-gray-100 text-gray-700 rounded-l-md focus:outline-none cursor-pointer"
-                defaultValue="all"
-              >
-                <option value="all">All</option>
-                {mockCategories.slice(0, 8).map((c) => (
-                  <option key={c.id} value={c.slug}>{c.name}</option>
-                ))}
-              </select>
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(e) => { setSearchQuery(e.target.value); setDropdownOpen(true); }}
-                onFocus={handleFocus}
-                placeholder="Search medications, vitamins, supplements…"
-                className="flex-1 h-10 px-4 text-sm text-gray-900 bg-white outline-none placeholder:text-gray-400 lg:rounded-none rounded-l-md"
-              />
-              <button
-                type="submit"
-                className="h-10 px-4 rounded-r-md flex items-center justify-center transition-colors hover:brightness-95"
-                style={{ background: "var(--color-amazon-search-btn)" }}
-              >
-                <Search className="w-5 h-5 text-gray-800" />
-              </button>
+          {/* Search */}
+          <div ref={searchRef} className="flex-1 hidden md:flex items-center max-w-2xl relative">
+            <form onSubmit={submit} className="w-full">
+              <div className="relative">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--color-text-tertiary)" }} />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => { setSearchQuery(e.target.value); setDropdownOpen(true); }}
+                  onFocus={handleFocus}
+                  placeholder="Search medications, vitamins, supplements…"
+                  className="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl outline-none transition-all"
+                  style={{
+                    background: "var(--color-surface-secondary)",
+                    border: "1.5px solid var(--color-border)",
+                    color: "var(--color-text)",
+                    fontFamily: "var(--font-sans)",
+                  }}
+                  onFocusCapture={(e) => { (e.target as HTMLInputElement).style.borderColor = "var(--color-primary-500)"; (e.target as HTMLInputElement).style.boxShadow = "0 0 0 3px rgba(8,145,178,0.15)"; }}
+                  onBlurCapture={(e) => { (e.target as HTMLInputElement).style.borderColor = "var(--color-border)"; (e.target as HTMLInputElement).style.boxShadow = "none"; }}
+                />
+              </div>
             </form>
 
-            {/* Dropdown */}
             {showDrop && (
-              <div className="absolute top-full mt-1 left-0 right-0 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
+              <div className="absolute top-full mt-2 left-0 right-0 bg-white rounded-2xl overflow-hidden z-50"
+                style={{ boxShadow: "var(--shadow-modal)", border: "1px solid var(--color-border)" }}>
                 {searchQuery.length >= 2 && results.length > 0 && (
-                  <div>
-                    <p className="px-4 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100">Products</p>
+                  <>
+                    <p className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest"
+                      style={{ color: "var(--color-text-tertiary)", background: "var(--color-surface-secondary)", borderBottom: "1px solid var(--color-border)" }}>
+                      Products
+                    </p>
                     {results.map((r) => (
                       <button key={r.slug} onClick={() => pickResult(r.slug, r.name)}
-                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors text-left border-b border-gray-50 last:border-0">
-                        <div className="w-10 h-10 rounded-lg bg-gray-100 shrink-0 overflow-hidden">
+                        className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors"
+                        style={{ borderBottom: "1px solid var(--color-border)" }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-surface-secondary)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+                        <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0" style={{ background: "var(--color-surface-tertiary)" }}>
                           <img src={r.images[0]} alt={r.name} className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">{r.name}</p>
-                          <p className="text-xs text-gray-500">{r.category?.name}</p>
+                          <p className="text-sm font-medium truncate" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>{r.name}</p>
+                          <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>{r.category?.name}</p>
                         </div>
-                        <p className="text-sm font-bold text-gray-900 shrink-0">฿{r.price}</p>
+                        <p className="text-sm font-bold shrink-0" style={{ color: "var(--color-primary-700)" }}>฿{r.price}</p>
                       </button>
                     ))}
-                  </div>
+                  </>
                 )}
                 {searchQuery.length < 2 && recent.length > 0 && (
-                  <div>
-                    <p className="px-4 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100">Recent Searches</p>
+                  <>
+                    <p className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest"
+                      style={{ color: "var(--color-text-tertiary)", background: "var(--color-surface-secondary)", borderBottom: "1px solid var(--color-border)" }}>
+                      Recent
+                    </p>
                     {recent.map((term) => (
                       <button key={term} onClick={() => { setSearchQuery(term); setDropdownOpen(false); router.push(`/shop?q=${encodeURIComponent(term)}`); }}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition-colors text-left">
-                        <Search className="w-4 h-4 text-gray-400 shrink-0" />
-                        <span className="text-sm text-gray-700">{term}</span>
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors"
+                        onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-surface-secondary)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+                        <Search className="w-3.5 h-3.5 shrink-0" style={{ color: "var(--color-text-tertiary)" }} />
+                        <span className="text-sm" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>{term}</span>
                       </button>
                     ))}
-                  </div>
+                  </>
                 )}
                 {searchQuery.length >= 2 && results.length === 0 && (
-                  <p className="px-4 py-4 text-sm text-gray-500">No results for &quot;{searchQuery}&quot;</p>
+                  <p className="px-4 py-4 text-sm" style={{ color: "var(--color-text-tertiary)", fontFamily: "var(--font-sans)" }}>
+                    No results for &quot;{searchQuery}&quot;
+                  </p>
                 )}
               </div>
             )}
           </div>
 
+          {/* Nav (desktop) */}
+          <nav className="hidden lg:flex items-center gap-0.5 ml-2">
+            {[{ label: "Shop", href: "/shop" }, { label: "Blog", href: "/blog" }].map((l) => (
+              <Link key={l.label} href={l.href}
+                className="px-3 py-2 text-sm font-medium rounded-lg transition-colors"
+                style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-primary-700)"; (e.currentTarget as HTMLElement).style.background = "var(--color-primary-50)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-text-secondary)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
           {/* Right actions */}
-          <div className="flex items-center gap-1 ml-auto shrink-0">
-            <Link href="/account" className="hidden sm:flex flex-col items-start px-2 py-1 text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors">
-              <span className="text-[10px]">Hello, sign in</span>
-              <span className="text-xs font-bold flex items-center gap-0.5">Account <ChevronDown className="w-3 h-3" /></span>
+          <div className="flex items-center gap-1 ml-auto">
+            {/* Mobile search toggle */}
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2.5 rounded-xl transition-colors md:hidden"
+              style={{ color: "var(--color-text-secondary)" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-surface-secondary)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
+              <Search className="w-5 h-5" />
+            </button>
+
+            <Link href="/account" className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors text-sm font-medium"
+              style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-surface-secondary)"; (e.currentTarget as HTMLElement).style.color = "var(--color-primary-700)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--color-text-secondary)"; }}>
+              <User className="w-5 h-5" />
+              <span className="hidden lg:block">Account <ChevronDown className="w-3 h-3 inline" /></span>
             </Link>
-            <Link href="/account/orders" className="hidden md:flex flex-col items-start px-2 py-1 text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors">
-              <span className="text-[10px]">Returns</span>
-              <span className="text-xs font-bold">& Orders</span>
-            </Link>
+
             <button onClick={openCart}
-              className="flex items-center gap-1.5 px-2 py-1 text-white hover:bg-white/10 rounded transition-colors relative"
-              aria-label="Cart">
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors relative text-sm font-medium"
+              style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-surface-secondary)"; (e.currentTarget as HTMLElement).style.color = "var(--color-primary-700)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--color-text-secondary)"; }}>
               <div className="relative">
-                <ShoppingCart className="w-6 h-6" />
+                <ShoppingCart className="w-5 h-5" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-1.5 min-w-[20px] h-5 text-[11px] font-bold rounded-full flex items-center justify-center leading-none px-1"
-                    style={{ background: "var(--color-amazon-orange)", color: "#111" }}>
+                  <span className="absolute -top-2 -right-1.5 min-w-[18px] h-[18px] text-[10px] font-bold rounded-full flex items-center justify-center leading-none px-0.5 text-white"
+                    style={{ background: "var(--color-primary-600)" }}>
                     {cartCount > 99 ? "99+" : cartCount}
                   </span>
                 )}
               </div>
-              <span className="hidden sm:block text-xs font-bold">Cart</span>
+              <span className="hidden lg:block">Cart</span>
             </button>
-            <button onClick={() => setMobileOpen(!mobileOpen)}
-              className="p-2 text-white hover:bg-white/10 rounded transition-colors sm:hidden">
+
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2.5 rounded-xl transition-colors lg:hidden"
+              style={{ color: "var(--color-text-secondary)" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-surface-secondary)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
+
+        {/* Mobile nav */}
+        {mobileOpen && (
+          <div style={{ borderTop: "1px solid var(--color-border)" }}>
+            <div className="max-w-[1400px] mx-auto px-4 py-3 flex flex-col gap-1">
+              <form onSubmit={submit} className="flex gap-2 mb-2">
+                <input type="search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search products…" autoFocus
+                  className="flex-1 px-4 py-2.5 text-sm rounded-xl outline-none"
+                  style={{ background: "var(--color-surface-secondary)", border: "1.5px solid var(--color-border)", fontFamily: "var(--font-sans)" }} />
+                <button type="submit" className="px-4 py-2.5 rounded-xl text-white text-sm font-semibold" style={{ background: "var(--color-primary-600)" }}>
+                  Search
+                </button>
+              </form>
+              {[{ label: "All Products", href: "/shop" }, { label: "My Account", href: "/account" }, { label: "My Orders", href: "/account/orders" }, { label: "Blog", href: "/blog" }].map((l) => (
+                <Link key={l.label} href={l.href} onClick={() => setMobileOpen(false)}
+                  className="px-3 py-2.5 text-sm font-medium rounded-xl transition-colors"
+                  style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}>
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* ── Category nav bar ── */}
-      <div style={{ background: "var(--color-amazon-nav2)" }}>
-        <div className="max-w-[1400px] mx-auto px-3 sm:px-4 h-9 flex items-center gap-0 overflow-x-auto scrollbar-hide">
-          <Link href="/shop" className="flex items-center gap-1 px-3 h-9 text-white text-xs font-medium hover:bg-white/10 shrink-0 transition-colors border border-transparent hover:border-white/30 rounded">
-            <Menu className="w-3.5 h-3.5" /> All
-          </Link>
+      {/* ── Category nav ── */}
+      <div style={{ background: "var(--color-surface-secondary)", borderBottom: "1px solid var(--color-border)" }}>
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-10 flex items-center gap-0 overflow-x-auto scrollbar-hide">
           {mockCategories.map((cat) => (
             <Link key={cat.id} href={`/shop/${cat.slug}`}
-              className="px-3 h-9 text-white text-xs font-medium hover:bg-white/10 shrink-0 transition-colors border border-transparent hover:border-white/30 rounded flex items-center whitespace-nowrap">
+              className="flex items-center gap-1.5 px-3 h-10 text-xs font-semibold whitespace-nowrap shrink-0 transition-colors rounded-md"
+              style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-primary-700)"; (e.currentTarget as HTMLElement).style.background = "var(--color-primary-50)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-text-secondary)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
+              <span style={{ color: "var(--color-primary-500)" }}>{categoryIcons[cat.slug]}</span>
               {cat.name}
             </Link>
           ))}
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="bg-white border-b border-gray-200 shadow-lg">
-          <div className="max-w-[1400px] mx-auto px-4 py-3 flex flex-col gap-1">
-            <form onSubmit={submit} className="flex gap-2 mb-2">
-              <input type="search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search products…" autoFocus
-                className="flex-1 px-4 py-2.5 text-sm border border-gray-300 rounded-lg text-gray-900 outline-none focus:border-blue-500" />
-              <button type="submit" className="px-4 py-2.5 rounded-lg text-white text-sm font-semibold" style={{ background: "var(--color-ios-blue)" }}>
-                Search
-              </button>
-            </form>
-            {[
-              { label: "All Products", href: "/shop" },
-              { label: "My Account", href: "/account" },
-              { label: "My Orders", href: "/account/orders" },
-              { label: "Blog", href: "/blog" },
-            ].map((l) => (
-              <Link key={l.label} href={l.href} onClick={() => setMobileOpen(false)}
-                className="px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
     </header>
   );
 }
