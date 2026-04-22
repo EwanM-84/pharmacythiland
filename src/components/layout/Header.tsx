@@ -87,10 +87,14 @@ export function Header() {
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
 
           {/* Logo */}
-          <Link href="/" className="shrink-0 group mr-2 transition-opacity hover:opacity-90">
-            <Image src="/logo.png" alt="Samui Home Clinic" width={130} height={84}
-              className="rounded-xl"
-              priority />
+          <Link href="/" className="shrink-0 mr-2 hover:opacity-90 transition-opacity">
+            <div className="h-11 rounded-xl overflow-hidden"
+              style={{ background: "#0d2e24", aspectRatio: "780/500" }}>
+              <Image src="/logo.png" alt="Samui Home Clinic"
+                width={172} height={110}
+                className="w-full h-full object-cover"
+                priority />
+            </div>
           </Link>
 
           {/* Search */}
