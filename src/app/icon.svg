@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- White rounded background -->
+  <rect width="32" height="32" rx="7" fill="#ffffff"/>
+
+  <!-- Green medical cross -->
+  <!-- Horizontal bar -->
+  <rect x="4" y="11" width="24" height="10" rx="2" fill="#16a34a"/>
+  <!-- Vertical bar -->
+  <rect x="11" y="4" width="10" height="24" rx="2" fill="#16a34a"/>
+</svg>
