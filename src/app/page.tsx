@@ -49,6 +49,12 @@ export default function HomePage() {
             <Image src="/header.png" alt="" fill className="object-cover object-center" priority />
             {/* Dark overlay for text legibility */}
             <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(10,37,64,0.82) 0%, rgba(10,37,64,0.55) 60%, rgba(10,37,64,0.15) 100%)" }} />
+            {/* Logo overlay on hero photo */}
+            <div className="absolute bottom-6 right-6 sm:bottom-10 sm:right-10 z-20 hidden sm:block">
+              <Image src="/logoBGR.png" alt="Samui Home Clinic" width={160} height={160}
+                style={{ width: "auto", height: "140px", opacity: 0.92 }} />
+            </div>
+
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-36 relative z-10" style={{ minHeight: "420px" }}>
               <div className="max-w-2xl">
                 <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-5 text-xs font-bold uppercase tracking-widest"

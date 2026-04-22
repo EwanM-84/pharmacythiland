@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
-  ShoppingCart, Search, User, Menu, X, ChevronDown,
+  ShoppingCart, Search, User, Menu, X, ChevronDown, MapPin,
   Pill, Leaf, Thermometer, Sparkles, Activity, Heart,
   Droplets, ShieldPlus, Baby, Eye, Flower2, Moon
 } from "lucide-react";
@@ -86,13 +86,37 @@ export function Header() {
       <div className="bg-white" style={{ boxShadow: "0 1px 0 var(--color-border)" }}>
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
 
-          {/* Logo */}
-          <Link href="/" className="shrink-0 mr-2 hover:opacity-90 transition-opacity">
+          {/* Logo + Brand */}
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-1 hover:opacity-90 transition-opacity">
             <Image src="/logo-white.png" alt="Samui Home Clinic"
-              width={56} height={56}
-              style={{ width: "auto", height: "56px" }}
+              width={52} height={52}
+              style={{ width: "auto", height: "52px" }}
               priority />
+            <div className="hidden sm:block leading-none">
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="text-[10px] font-black tracking-tight text-white px-1.5 py-0.5 rounded"
+                  style={{ background: "var(--color-primary-600)", fontFamily: "var(--font-sans)" }}>Rx</span>
+                <p className="font-bold text-sm tracking-tight" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>
+                  SAMUI PHARMACY
+                </p>
+              </div>
+              <p className="text-[10px] font-semibold tracking-[0.12em] uppercase" style={{ color: "var(--color-primary-600)", fontFamily: "var(--font-sans)" }}>
+                Koh Samui, Thailand
+              </p>
+            </div>
           </Link>
+
+          {/* Deliver-to widget (Amazon style) */}
+          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl cursor-pointer shrink-0 transition-colors"
+            style={{ border: "1.5px solid var(--color-border)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--color-primary-400)"; (e.currentTarget as HTMLElement).style.background = "var(--color-surface-secondary)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--color-border)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
+            <MapPin className="w-4 h-4 shrink-0" style={{ color: "var(--color-primary-600)" }} />
+            <div className="leading-none">
+              <p className="text-[10px] font-medium" style={{ color: "var(--color-text-tertiary)", fontFamily: "var(--font-sans)" }}>Deliver to</p>
+              <p className="text-xs font-bold" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>Koh Samui 84140</p>
+            </div>
+          </div>
 
           {/* Search */}
           <div ref={searchRef} className="flex-1 hidden md:flex items-center max-w-2xl relative">
