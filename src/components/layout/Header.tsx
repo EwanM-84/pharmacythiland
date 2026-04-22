@@ -1,356 +1,237 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ShoppingCart, Search, User, Menu, X } from "lucide-react";
+import { ShoppingCart, Search, User, Menu, X, MapPin, ChevronDown } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { createClient } from "@supabase/supabase-js";
+import { mockProducts, mockCategories } from "@/lib/mock-products";
 
-const navLinks = [
-  { label: "Shop", href: "/shop" },
-  { label: "Blog", href: "/blog" },
-];
+const RECENT_KEY = "shc-recent";
 
-const RECENT_SEARCHES_KEY = "shc-recent-searches";
-
-interface SearchResult {
-  name: string;
-  slug: string;
-  images: string[];
-  price: number;
-}
-
-function getRecentSearches(): string[] {
+function getRecent(): string[] {
   if (typeof window === "undefined") return [];
-  try {
-    return JSON.parse(localStorage.getItem(RECENT_SEARCHES_KEY) || "[]");
-  } catch {
-    return [];
-  }
+  try { return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]"); } catch { return []; }
 }
-
-function saveRecentSearch(term: string) {
-  const existing = getRecentSearches().filter((s) => s !== term);
-  const updated = [term, ...existing].slice(0, 5);
-  localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
-}
-
-function removeRecentSearch(term: string) {
-  const updated = getRecentSearches().filter((s) => s !== term);
-  localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
-}
-
-function formatPrice(price: number) {
-  return `฿${price.toLocaleString("th-TH", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+function saveRecent(term: string) {
+  const updated = [term, ...getRecent().filter((s) => s !== term)].slice(0, 6);
+  localStorage.setItem(RECENT_KEY, JSON.stringify(updated));
 }
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [searching, setSearching] = useState(false);
+  const [recent, setRecent] = useState<string[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const router = useRouter();
   const { totalItems, openCart } = useCartStore();
   const cartCount = totalItems();
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const results = searchQuery.length >= 2
+    ? mockProducts
+        .filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+        .slice(0, 6)
+    : [];
 
-  // Close dropdown on outside click
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
-      }
+    function outside(e: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) setDropdownOpen(false);
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", outside);
+    return () => document.removeEventListener("mousedown", outside);
   }, []);
 
-  const fetchResults = useCallback(
-    async (q: string) => {
-      if (q.length < 2) {
-        setSearchResults([]);
-        setSearching(false);
-        return;
-      }
-      setSearching(true);
-      const { data } = await supabase
-        .from("products")
-        .select("name, slug, images, price")
-        .eq("is_active", true)
-        .ilike("name", `%${q}%`)
-        .limit(6);
-      setSearchResults((data as SearchResult[]) ?? []);
-      setSearching(false);
-    },
-    [supabase]
-  );
-
-  function handleSearchInput(value: string) {
-    setSearchQuery(value);
+  const handleFocus = useCallback(() => {
+    setRecent(getRecent());
     setDropdownOpen(true);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => fetchResults(value), 300);
-  }
+  }, []);
 
-  function handleSearchFocus() {
-    setRecentSearches(getRecentSearches());
-    setDropdownOpen(true);
-  }
-
-  function handleSearchSubmit(e: React.FormEvent) {
+  function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      saveRecentSearch(searchQuery.trim());
-      router.push(`/shop?q=${encodeURIComponent(searchQuery.trim())}`);
-      setDropdownOpen(false);
-      setSearchQuery("");
-      setSearchOpen(false);
-    }
+    if (!searchQuery.trim()) return;
+    saveRecent(searchQuery.trim());
+    router.push(`/shop?q=${encodeURIComponent(searchQuery.trim())}`);
+    setDropdownOpen(false);
+    setSearchQuery("");
   }
 
-  function handleResultClick(slug: string, name: string) {
-    saveRecentSearch(name);
+  function pickResult(slug: string, name: string) {
+    saveRecent(name);
     router.push(`/product/${slug}`);
     setDropdownOpen(false);
     setSearchQuery("");
-    setSearchOpen(false);
   }
 
-  function handleRemoveRecent(e: React.MouseEvent, term: string) {
-    e.stopPropagation();
-    removeRecentSearch(term);
-    setRecentSearches(getRecentSearches());
-  }
-
-  const showDropdown =
-    dropdownOpen && (searchResults.length > 0 || recentSearches.length > 0 || searchQuery.length >= 2);
+  const showDrop = dropdownOpen && (results.length > 0 || (searchQuery.length < 2 && recent.length > 0));
 
   return (
-    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-[var(--color-border)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center h-16 gap-4">
-
+    <header className="sticky top-0 z-40">
+      {/* ── Top bar (Amazon dark) ── */}
+      <div style={{ background: "var(--color-amazon-nav)" }}>
+        <div className="max-w-[1400px] mx-auto px-3 sm:px-4 h-14 flex items-center gap-3">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 shrink-0 mr-2">
-            <div className="w-10 h-10 relative">
-              <Image
-                src="/logo.png"
-                alt="Samui Home Clinic Pharmacy"
-                fill
-                className="object-contain"
-                priority
-              />
+          <Link href="/" className="flex items-center gap-2 shrink-0 group">
+            <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+              <span className="text-white font-black text-sm">Rx</span>
             </div>
-            <div className="hidden sm:flex flex-col leading-none">
-              <span
-                className="font-semibold text-[var(--color-text)] text-sm tracking-wide"
-                style={{ fontFamily: "var(--font-display)", letterSpacing: "0.07em" }}
-              >
-                SAMUI HOME CLINIC
-              </span>
-              <span
-                className="text-[10px] font-semibold uppercase tracking-[0.2em]"
-                style={{ color: "var(--color-primary-600)" }}
-              >
-                Pharmacy
-              </span>
+            <div className="hidden sm:block">
+              <p className="text-white font-bold text-sm leading-none tracking-tight">SAMUI PHARMACY</p>
+              <p style={{ color: "var(--color-amazon-search-btn)", fontSize: "10px" }} className="font-medium tracking-wide">KOH SAMUI</p>
             </div>
           </Link>
 
-          {/* Search bar (desktop) */}
-          <div ref={searchRef} className="flex-1 hidden md:flex items-center max-w-xl relative">
-            <form onSubmit={handleSearchSubmit} className="w-full">
-              <div className="relative">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-muted)]" />
-                <input
-                  type="search"
-                  value={searchQuery}
-                  onChange={(e) => handleSearchInput(e.target.value)}
-                  onFocus={handleSearchFocus}
-                  placeholder="Search medications, vitamins…"
-                  className={cn(
-                    "w-full rounded-full pl-10 pr-4 py-2.5 text-sm outline-none transition-all",
-                    "bg-[var(--color-surface-secondary)] border border-[var(--color-border)]",
-                    "text-[var(--color-text)] placeholder:text-[var(--color-text-muted)]",
-                    "focus:bg-white focus:border-[var(--color-primary-400)] focus:ring-2 focus:ring-[var(--color-primary-200)]"
-                  )}
-                />
-              </div>
+          {/* Deliver to */}
+          <button className="hidden md:flex items-start gap-1.5 text-white/80 hover:text-white transition-colors shrink-0 group">
+            <MapPin className="w-4 h-4 mt-0.5 text-white/60 group-hover:text-white" />
+            <div className="text-left leading-none">
+              <p className="text-[10px] text-white/60">Deliver to</p>
+              <p className="text-xs font-bold text-white">Koh Samui</p>
+            </div>
+          </button>
+
+          {/* Search bar */}
+          <div ref={searchRef} className="flex-1 relative max-w-3xl">
+            <form onSubmit={submit} className="flex">
+              <select
+                className="hidden lg:block shrink-0 h-10 px-2 text-xs font-medium border-r border-gray-300 bg-gray-100 text-gray-700 rounded-l-md focus:outline-none cursor-pointer"
+                defaultValue="all"
+              >
+                <option value="all">All</option>
+                {mockCategories.slice(0, 8).map((c) => (
+                  <option key={c.id} value={c.slug}>{c.name}</option>
+                ))}
+              </select>
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(e) => { setSearchQuery(e.target.value); setDropdownOpen(true); }}
+                onFocus={handleFocus}
+                placeholder="Search medications, vitamins, supplements…"
+                className="flex-1 h-10 px-4 text-sm text-gray-900 bg-white outline-none placeholder:text-gray-400 lg:rounded-none rounded-l-md"
+              />
+              <button
+                type="submit"
+                className="h-10 px-4 rounded-r-md flex items-center justify-center transition-colors hover:brightness-95"
+                style={{ background: "var(--color-amazon-search-btn)" }}
+              >
+                <Search className="w-5 h-5 text-gray-800" />
+              </button>
             </form>
 
-            {/* Autocomplete dropdown */}
-            {showDropdown && (
-              <div className="absolute top-full mt-2 left-0 right-0 bg-white rounded-2xl shadow-lg border border-[var(--color-border)] py-2 z-50 max-h-96 overflow-y-auto">
-                {searchQuery.length >= 2 && searchResults.length > 0 && (
-                  <>
-                    <div className="px-3 py-1.5 text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">
-                      Results
-                    </div>
-                    {searchResults.map((result) => (
-                      <button
-                        key={result.slug}
-                        onClick={() => handleResultClick(result.slug, result.name)}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-[var(--color-surface-secondary)] transition-colors text-left"
-                      >
-                        <div className="w-10 h-10 relative rounded-lg overflow-hidden bg-[var(--color-surface-tertiary)] shrink-0">
-                          {result.images?.[0] && (
-                            <Image src={result.images[0]} alt={result.name} fill className="object-cover" />
-                          )}
+            {/* Dropdown */}
+            {showDrop && (
+              <div className="absolute top-full mt-1 left-0 right-0 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
+                {searchQuery.length >= 2 && results.length > 0 && (
+                  <div>
+                    <p className="px-4 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100">Products</p>
+                    {results.map((r) => (
+                      <button key={r.slug} onClick={() => pickResult(r.slug, r.name)}
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors text-left border-b border-gray-50 last:border-0">
+                        <div className="w-10 h-10 rounded-lg bg-gray-100 shrink-0 overflow-hidden">
+                          <img src={r.images[0]} alt={r.name} className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-[var(--color-text)] truncate">{result.name}</p>
-                          <p className="text-xs text-[var(--color-primary-600)] font-semibold">
-                            {formatPrice(result.price)}
-                          </p>
+                          <p className="text-sm font-medium text-gray-900 truncate">{r.name}</p>
+                          <p className="text-xs text-gray-500">{r.category?.name}</p>
                         </div>
+                        <p className="text-sm font-bold text-gray-900 shrink-0">฿{r.price}</p>
                       </button>
                     ))}
-                    {searching && (
-                      <p className="px-4 py-2.5 text-sm text-[var(--color-text-muted)]">Searching…</p>
-                    )}
-                  </>
+                  </div>
                 )}
-                {searchQuery.length < 2 && recentSearches.length > 0 && (
-                  <>
-                    <div className="px-3 py-1.5 text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">
-                      Recent
-                    </div>
-                    {recentSearches.map((term) => (
-                      <div
-                        key={term}
-                        className="flex items-center gap-2 px-3 py-2.5 hover:bg-[var(--color-surface-secondary)] transition-colors cursor-pointer"
-                        onClick={() => {
-                          setSearchQuery(term);
-                          handleSearchInput(term);
-                        }}
-                      >
-                        <Search className="w-3.5 h-3.5 text-[var(--color-text-muted)] shrink-0" />
-                        <span className="flex-1 text-sm text-[var(--color-text)]">{term}</span>
-                        <button
-                          onClick={(e) => handleRemoveRecent(e, term)}
-                          className="p-1 rounded-full hover:bg-[var(--color-surface-tertiary)] text-[var(--color-text-muted)]"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </div>
+                {searchQuery.length < 2 && recent.length > 0 && (
+                  <div>
+                    <p className="px-4 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100">Recent Searches</p>
+                    {recent.map((term) => (
+                      <button key={term} onClick={() => { setSearchQuery(term); setDropdownOpen(false); router.push(`/shop?q=${encodeURIComponent(term)}`); }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition-colors text-left">
+                        <Search className="w-4 h-4 text-gray-400 shrink-0" />
+                        <span className="text-sm text-gray-700">{term}</span>
+                      </button>
                     ))}
-                  </>
+                  </div>
                 )}
-                {searchQuery.length >= 2 && !searching && searchResults.length === 0 && (
-                  <p className="px-4 py-3 text-sm text-[var(--color-text-muted)]">
-                    No results for &quot;{searchQuery}&quot;
-                  </p>
+                {searchQuery.length >= 2 && results.length === 0 && (
+                  <p className="px-4 py-4 text-sm text-gray-500">No results for &quot;{searchQuery}&quot;</p>
                 )}
               </div>
             )}
           </div>
 
-          {/* Nav (desktop) */}
-          <nav className="hidden lg:flex items-center gap-1 ml-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-primary-600)] hover:bg-[var(--color-primary-50)] rounded-full transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
           {/* Right actions */}
-          <div className="flex items-center gap-1 ml-auto">
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2.5 rounded-full text-[var(--color-text-secondary)] hover:text-[var(--color-primary-600)] hover:bg-[var(--color-primary-50)] transition-colors md:hidden"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-            </button>
-
-            <Link
-              href="/account"
-              className="p-2.5 rounded-full text-[var(--color-text-secondary)] hover:text-[var(--color-primary-600)] hover:bg-[var(--color-primary-50)] transition-colors hidden sm:flex"
-              aria-label="My account"
-            >
-              <User className="w-5 h-5" />
+          <div className="flex items-center gap-1 ml-auto shrink-0">
+            <Link href="/account" className="hidden sm:flex flex-col items-start px-2 py-1 text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors">
+              <span className="text-[10px]">Hello, sign in</span>
+              <span className="text-xs font-bold flex items-center gap-0.5">Account <ChevronDown className="w-3 h-3" /></span>
             </Link>
-
-            <button
-              onClick={openCart}
-              className="p-2.5 rounded-full text-[var(--color-text-secondary)] hover:text-[var(--color-primary-600)] hover:bg-[var(--color-primary-50)] transition-colors relative"
-              aria-label="Cart"
-            >
-              <ShoppingCart className="w-5 h-5" />
-              {cartCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] text-[10px] font-bold rounded-full flex items-center justify-center leading-none px-0.5 text-white bg-[var(--color-primary-500)]">
-                  {cartCount > 99 ? "99+" : cartCount}
-                </span>
-              )}
+            <Link href="/account/orders" className="hidden md:flex flex-col items-start px-2 py-1 text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors">
+              <span className="text-[10px]">Returns</span>
+              <span className="text-xs font-bold">& Orders</span>
+            </Link>
+            <button onClick={openCart}
+              className="flex items-center gap-1.5 px-2 py-1 text-white hover:bg-white/10 rounded transition-colors relative"
+              aria-label="Cart">
+              <div className="relative">
+                <ShoppingCart className="w-6 h-6" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-1.5 min-w-[20px] h-5 text-[11px] font-bold rounded-full flex items-center justify-center leading-none px-1"
+                    style={{ background: "var(--color-amazon-orange)", color: "#111" }}>
+                    {cartCount > 99 ? "99+" : cartCount}
+                  </span>
+                )}
+              </div>
+              <span className="hidden sm:block text-xs font-bold">Cart</span>
             </button>
-
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="p-2.5 rounded-full text-[var(--color-text-secondary)] hover:text-[var(--color-primary-600)] hover:bg-[var(--color-primary-50)] transition-colors lg:hidden"
-              aria-label="Menu"
-            >
+            <button onClick={() => setMobileOpen(!mobileOpen)}
+              className="p-2 text-white hover:bg-white/10 rounded transition-colors sm:hidden">
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Mobile search */}
-        {searchOpen && (
-          <form onSubmit={handleSearchSubmit} className="pb-3 md:hidden">
-            <div className="relative">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-muted)]" />
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search medications, vitamins…"
-                autoFocus
-                className="w-full rounded-full pl-10 pr-4 py-2.5 text-sm bg-[var(--color-surface-secondary)] border border-[var(--color-border)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary-400)] focus:ring-2 focus:ring-[var(--color-primary-200)]"
-              />
-            </div>
-          </form>
-        )}
+      {/* ── Category nav bar ── */}
+      <div style={{ background: "var(--color-amazon-nav2)" }}>
+        <div className="max-w-[1400px] mx-auto px-3 sm:px-4 h-9 flex items-center gap-0 overflow-x-auto scrollbar-hide">
+          <Link href="/shop" className="flex items-center gap-1 px-3 h-9 text-white text-xs font-medium hover:bg-white/10 shrink-0 transition-colors border border-transparent hover:border-white/30 rounded">
+            <Menu className="w-3.5 h-3.5" /> All
+          </Link>
+          {mockCategories.map((cat) => (
+            <Link key={cat.id} href={`/shop/${cat.slug}`}
+              className="px-3 h-9 text-white text-xs font-medium hover:bg-white/10 shrink-0 transition-colors border border-transparent hover:border-white/30 rounded flex items-center whitespace-nowrap">
+              {cat.name}
+            </Link>
+          ))}
+        </div>
+      </div>
 
-        {/* Mobile nav */}
-        {mobileOpen && (
-          <nav className="pb-3 border-t border-[var(--color-border)] pt-3 lg:hidden flex flex-col gap-0.5">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="px-3 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-primary-50)] hover:text-[var(--color-primary-700)] rounded-xl transition-colors"
-              >
-                {link.label}
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="bg-white border-b border-gray-200 shadow-lg">
+          <div className="max-w-[1400px] mx-auto px-4 py-3 flex flex-col gap-1">
+            <form onSubmit={submit} className="flex gap-2 mb-2">
+              <input type="search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products…" autoFocus
+                className="flex-1 px-4 py-2.5 text-sm border border-gray-300 rounded-lg text-gray-900 outline-none focus:border-blue-500" />
+              <button type="submit" className="px-4 py-2.5 rounded-lg text-white text-sm font-semibold" style={{ background: "var(--color-ios-blue)" }}>
+                Search
+              </button>
+            </form>
+            {[
+              { label: "All Products", href: "/shop" },
+              { label: "My Account", href: "/account" },
+              { label: "My Orders", href: "/account/orders" },
+              { label: "Blog", href: "/blog" },
+            ].map((l) => (
+              <Link key={l.label} href={l.href} onClick={() => setMobileOpen(false)}
+                className="px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                {l.label}
               </Link>
             ))}
-            <Link
-              href="/account"
-              onClick={() => setMobileOpen(false)}
-              className="px-3 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-primary-50)] hover:text-[var(--color-primary-700)] rounded-xl transition-colors"
-            >
-              My Account
-            </Link>
-          </nav>
-        )}
-      </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

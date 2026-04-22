@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import type { Product } from "@/types";
 import { useCartStore } from "@/stores/cartStore";
-import { Button } from "@/components/ui/button";
 
 export function AddToCartButton({ product }: { product: Product }) {
   const [qty, setQty] = useState(1);
@@ -14,37 +13,21 @@ export function AddToCartButton({ product }: { product: Product }) {
   const router = useRouter();
 
   function handleAdd() {
-    addItem({
-      product_id: product.id,
-      name: product.name,
-      slug: product.slug,
-      image: product.images?.[0] ?? "",
-      price: product.price,
-      quantity: qty,
-      requires_prescription: product.requires_prescription,
-    });
+    addItem({ product_id: product.id, name: product.name, slug: product.slug, image: product.images?.[0] ?? "", price: product.price, quantity: qty, requires_prescription: product.requires_prescription });
     openCart();
     toast.success(`${qty}× ${product.name} added to cart`);
   }
 
   function handleBuyNow() {
-    addItem({
-      product_id: product.id,
-      name: product.name,
-      slug: product.slug,
-      image: product.images?.[0] ?? "",
-      price: product.price,
-      quantity: qty,
-      requires_prescription: product.requires_prescription,
-    });
+    addItem({ product_id: product.id, name: product.name, slug: product.slug, image: product.images?.[0] ?? "", price: product.price, quantity: qty, requires_prescription: product.requires_prescription });
     router.push("/checkout");
   }
 
   if (product.stock_qty <= 0) {
     return (
-      <Button variant="ghost" disabled className="w-full">
+      <button disabled className="w-full py-3 rounded-xl font-bold text-gray-400 bg-gray-100 border border-gray-200 cursor-not-allowed">
         Out of Stock
-      </Button>
+      </button>
     );
   }
 
@@ -52,32 +35,27 @@ export function AddToCartButton({ product }: { product: Product }) {
     <div className="flex flex-col gap-3">
       <div className="flex gap-3">
         {/* Qty stepper */}
-        <div className="flex items-center border border-[var(--color-border)] rounded-full overflow-hidden shrink-0">
-          <button
-            onClick={() => setQty((q) => Math.max(1, q - 1))}
-            className="px-3 py-3 hover:bg-[var(--color-surface-tertiary)] transition-colors"
-          >
+        <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden shrink-0">
+          <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="px-3 py-3 hover:bg-gray-100 transition-colors">
             <Minus className="w-4 h-4" />
           </button>
-          <span className="px-4 text-sm font-semibold min-w-[2.5rem] text-center">{qty}</span>
-          <button
-            onClick={() => setQty((q) => Math.min(product.stock_qty, q + 1))}
-            className="px-3 py-3 hover:bg-[var(--color-surface-tertiary)] transition-colors"
-          >
+          <span className="px-4 text-sm font-bold min-w-[2.5rem] text-center">{qty}</span>
+          <button onClick={() => setQty((q) => Math.min(product.stock_qty, q + 1))} className="px-3 py-3 hover:bg-gray-100 transition-colors">
             <Plus className="w-4 h-4" />
           </button>
         </div>
 
-        <Button onClick={handleAdd} className="flex-1">
-          <ShoppingCart className="w-4 h-4" />
-          Add to Cart
-        </Button>
+        <button onClick={handleAdd}
+          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white text-sm transition-all hover:brightness-105 active:scale-97"
+          style={{ background: "var(--color-ios-blue)" }}>
+          <ShoppingCart className="w-4 h-4" /> Add to Cart
+        </button>
       </div>
 
-      {/* Buy Now */}
-      <button onClick={handleBuyNow} className="btn-buy-now w-full">
-        <Zap className="w-4 h-4" />
-        Buy Now
+      <button onClick={handleBuyNow}
+        className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm transition-all hover:brightness-95 active:scale-97"
+        style={{ background: "linear-gradient(180deg,#FFD814 0%,#F5A623 100%)", color: "#111", border: "1px solid #C8960C", boxShadow: "0 1px 2px rgba(0,0,0,0.15)" }}>
+        <Zap className="w-4 h-4" /> Buy Now
       </button>
     </div>
   );
