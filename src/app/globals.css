@@ -85,7 +85,12 @@
    ============================================================ */
 :root { color-scheme: light; }
 *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* Prevent font size inflation on iOS rotation */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 
 body {
   background-color: var(--color-surface-secondary);
@@ -96,6 +101,24 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "kern" 1, "liga" 1;
+  /* Full-width on mobile, prevent horizontal scroll */
+  overflow-x: hidden;
+  /* iOS momentum scrolling */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Improve touch target feel on mobile */
+button, a, [role="button"] {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+
+/* iOS safe area support for cart bottom sheet etc */
+.pb-safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.pt-safe-top {
+  padding-top: max(0px, env(safe-area-inset-top));
 }
 
 /* ── Apply display font to all headings ── */

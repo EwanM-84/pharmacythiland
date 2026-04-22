@@ -5,11 +5,13 @@ import Image from "next/image";
 import { X, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/stores/cartStore";
+import { useLanguageStore } from "@/stores/languageStore";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, updateQty, subtotal } = useCartStore();
+  const { t } = useLanguageStore();
   const total = subtotal();
 
   const CartContents = () => (
@@ -18,7 +20,7 @@ export function CartDrawer() {
       <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border)]">
         <div className="flex items-center gap-2">
           <ShoppingBag className="w-5 h-5 text-[var(--color-primary-600)]" />
-          <h2 className="font-bold text-lg text-[var(--color-text)]">Your Cart</h2>
+          <h2 className="font-bold text-lg text-[var(--color-text)]">{t.yourCart}</h2>
           {items.length > 0 && (
             <span className="badge badge-primary text-xs">{items.length}</span>
           )}
@@ -36,11 +38,11 @@ export function CartDrawer() {
               <ShoppingBag className="w-9 h-9 text-[var(--color-primary-400)]" />
             </div>
             <div>
-              <p className="font-semibold text-[var(--color-text)]">Your cart is empty</p>
-              <p className="text-sm text-[var(--color-text-secondary)] mt-1">Add some products to get started</p>
+              <p className="font-semibold text-[var(--color-text)]">{t.cartEmpty}</p>
+              <p className="text-sm text-[var(--color-text-secondary)] mt-1">{t.cartEmptySub}</p>
             </div>
             <Button variant="secondary" onClick={closeCart} size="sm">
-              Continue Shopping
+              {t.continueShopping}
             </Button>
           </div>
         ) : (
@@ -73,14 +75,14 @@ export function CartDrawer() {
                   <div className="flex items-center gap-2 mt-2">
                     <button
                       onClick={() => updateQty(item.product_id, item.quantity - 1)}
-                      className="w-7 h-7 rounded-full border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary-500)] hover:text-[var(--color-primary-600)] transition-colors"
+                      className="w-9 h-9 rounded-full border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary-500)] hover:text-[var(--color-primary-600)] transition-colors touch-manipulation"
                     >
                       <Minus className="w-3 h-3" />
                     </button>
                     <span className="text-sm font-semibold w-5 text-center">{item.quantity}</span>
                     <button
                       onClick={() => updateQty(item.product_id, item.quantity + 1)}
-                      className="w-7 h-7 rounded-full border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary-500)] hover:text-[var(--color-primary-600)] transition-colors"
+                      className="w-9 h-9 rounded-full border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary-500)] hover:text-[var(--color-primary-600)] transition-colors touch-manipulation"
                     >
                       <Plus className="w-3 h-3" />
                     </button>
@@ -104,11 +106,11 @@ export function CartDrawer() {
       {items.length > 0 && (
         <div className="px-5 py-4 border-t border-[var(--color-border)] bg-[var(--color-surface-secondary)] pb-safe-bottom">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm text-[var(--color-text-secondary)]">Subtotal</span>
+            <span className="text-sm text-[var(--color-text-secondary)]">{t.subtotal}</span>
             <span className="font-bold text-lg text-[var(--color-text)]">{formatPrice(total)}</span>
           </div>
           <p className="text-xs text-[var(--color-text-secondary)] mb-3 text-center">
-            Delivery calculated at checkout
+            {t.deliveryAtCheckout}
           </p>
           <Link href="/checkout" onClick={closeCart}>
             <Button variant="primary" className="w-full" size="md">
@@ -119,7 +121,7 @@ export function CartDrawer() {
             onClick={closeCart}
             className="w-full mt-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors py-2"
           >
-            Continue Shopping
+            {t.continueShopping}
           </button>
         </div>
       )}

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Roboto } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -9,6 +9,14 @@ const roboto = Roboto({
   weight: ["300", "400", "500", "700", "900"],
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: "#0891b2",
+};
 
 export const metadata: Metadata = {
   title: {

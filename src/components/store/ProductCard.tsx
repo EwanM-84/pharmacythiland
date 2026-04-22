@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import type { Product } from "@/types";
 import { useCartStore } from "@/stores/cartStore";
+import { useLanguageStore } from "@/stores/languageStore";
 
 interface ProductCardProps {
   product: Product;
@@ -37,6 +38,7 @@ const MotionLink = motion.create(Link);
 
 export function ProductCard({ product, layout = "grid" }: ProductCardProps) {
   const { addItem, openCart } = useCartStore();
+  const { t } = useLanguageStore();
 
   const image = product.images?.[0] ?? null;
   const discount =
@@ -214,21 +216,21 @@ export function ProductCard({ product, layout = "grid" }: ProductCardProps) {
 
         <p className="text-[11px] font-medium mb-2.5" style={{ color: "#15803d" }}>
           {product.stock_qty > 0 && product.stock_qty <= product.low_stock_threshold
-            ? `Only ${product.stock_qty} left`
+            ? t.onlyLeft(product.stock_qty)
             : product.stock_qty > 0
-            ? "In Stock"
-            : "Out of Stock"}
+            ? t.inStock
+            : t.outOfStock}
         </p>
 
         {product.stock_qty > 0 && (
           <button onClick={handleAddToCart}
-            className="w-full py-2 rounded-lg text-sm font-semibold transition-all active:scale-95 flex items-center justify-center gap-1.5 text-white"
+            className="w-full py-2.5 min-h-[44px] rounded-lg text-sm font-semibold transition-all active:scale-95 flex items-center justify-center gap-1.5 text-white touch-manipulation"
             style={{ background: "var(--color-primary-600)", boxShadow: "var(--shadow-button)" }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-700)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-600)"; }}
             aria-label={`Add ${product.name} to cart`}>
             <Plus className="w-4 h-4" />
-            Add to Cart
+            {t.addToCart}
           </button>
         )}
       </div>

@@ -2,8 +2,25 @@ import type { Category, Product } from "@/types";
 
 const now = new Date().toISOString();
 
+const imgKeywords = [
+  "pills,tablets,medicine",
+  "pharmacy,bottles,medicine",
+  "capsules,supplements,health",
+  "vitamins,healthcare,medicine",
+  "cream,ointment,skincare",
+  "syrup,liquid,medicine",
+  "inhaler,respiratory,medicine",
+  "injection,vaccine,medical",
+  "eyedrops,optic,medicine",
+  "baby,pediatric,medicine",
+  "allergy,antihistamine,medicine",
+  "sleep,wellness,health",
+];
+
 function img(seed: string) {
-  return `https://picsum.photos/seed/${seed}/400/400`;
+  const hash = seed.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  const keywords = imgKeywords[hash % imgKeywords.length];
+  return `https://loremflickr.com/400/400/${keywords}?lock=${hash}`;
 }
 
 export const mockCategories: Category[] = [
@@ -172,6 +189,25 @@ export function getBestSellers(limit = 8): Product[] {
   return [...mockProducts]
     .sort((a, b) => (b.review_count ?? 0) - (a.review_count ?? 0))
     .slice(0, limit);
+}
+
+export function getTrending(limit = 8): Product[] {
+  return [...mockProducts]
+    .sort((a, b) => (b.review_count ?? 0) - (a.review_count ?? 0))
+    .slice(8, 8 + limit);
+}
+
+export function getCustomerFavorites(limit = 8): Product[] {
+  return mockProducts.filter((p) => (p.avg_rating ?? 0) >= 4.8).slice(0, limit);
+}
+
+export function getStaffPicks(limit = 8): Product[] {
+  const ids = ["pr-7", "vi-1", "cf-5", "dg-6", "sk-5", "bc-4", "al-1", "sw-2"];
+  return ids.map((id) => mockProducts.find((p) => p.id === id)!).filter(Boolean).slice(0, limit);
+}
+
+export function getSeasonalEssentials(limit = 8): Product[] {
+  return mockProducts.filter((p) => ["cat-3", "cat-11", "cat-2", "cat-9"].includes(p.category_id)).slice(0, limit);
 }
 
 export function getRelatedProducts(product: Product, limit = 4): Product[] {

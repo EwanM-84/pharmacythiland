@@ -147,7 +147,7 @@ export default function CheckoutPage() {
                 <div className="px-6 py-4 border-b border-gray-100">
                   <h2 className="font-bold text-gray-900">Delivery Method</h2>
                 </div>
-                <div className="p-5 grid grid-cols-2 gap-3">
+                <div className="p-4 sm:p-5 grid grid-cols-2 gap-3">
                   {(["delivery", "collect"] as Fulfillment[]).map((type) => (
                     <button key={type} onClick={() => setFulfillment(type)}
                       className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${fulfillment === type ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-blue-300"}`}>
@@ -167,8 +167,8 @@ export default function CheckoutPage() {
                     <MapPin className="w-4 h-4 text-blue-600" />
                     <h2 className="font-bold text-gray-900">Delivery Address</h2>
                   </div>
-                  <div className="p-5 flex flex-col gap-3">
-                    <div className="grid grid-cols-2 gap-3">
+                  <div className="p-4 sm:p-5 flex flex-col gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className="text-xs font-semibold text-gray-600 block mb-1">First Name *</label>
                         <input value={address.firstName} onChange={(e) => setAddress((a) => ({ ...a, firstName: e.target.value }))}
@@ -190,7 +190,7 @@ export default function CheckoutPage() {
                       <input value={address.line2} onChange={(e) => setAddress((a) => ({ ...a, line2: e.target.value }))}
                         placeholder="Village, Moo" className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className="text-xs font-semibold text-gray-600 block mb-1">District / Area *</label>
                         <input value={address.district} onChange={(e) => setAddress((a) => ({ ...a, district: e.target.value }))}
@@ -311,7 +311,7 @@ export default function CheckoutPage() {
                           className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm font-medium outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 uppercase tracking-wider" />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="text-xs font-semibold text-gray-600 block mb-1.5">Expiry Date</label>
                           <input value={card.expiry} onChange={(e) => setCard((c) => ({ ...c, expiry: formatExpiry(e.target.value) }))}

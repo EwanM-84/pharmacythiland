@@ -6,10 +6,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import type { Product } from "@/types";
 import { useCartStore } from "@/stores/cartStore";
+import { useLanguageStore } from "@/stores/languageStore";
 
 export function AddToCartButton({ product }: { product: Product }) {
   const [qty, setQty] = useState(1);
   const { addItem, openCart } = useCartStore();
+  const { t } = useLanguageStore();
   const router = useRouter();
 
   function handleAdd() {
@@ -26,7 +28,7 @@ export function AddToCartButton({ product }: { product: Product }) {
   if (product.stock_qty <= 0) {
     return (
       <button disabled className="w-full py-3 rounded-xl font-bold text-gray-400 bg-gray-100 border border-gray-200 cursor-not-allowed">
-        Out of Stock
+        {t.outOfStock}
       </button>
     );
   }
@@ -50,14 +52,14 @@ export function AddToCartButton({ product }: { product: Product }) {
           style={{ background: "var(--color-primary-600)", boxShadow: "var(--shadow-button)" }}
           onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-700)"; }}
           onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-600)"; }}>
-          <ShoppingCart className="w-4 h-4" /> Add to Cart
+          <ShoppingCart className="w-4 h-4" /> {t.addToCart}
         </button>
       </div>
 
       <button onClick={handleBuyNow}
         className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm transition-all hover:brightness-95 active:scale-97"
         style={{ background: "var(--color-primary-500)", color: "#fff", boxShadow: "var(--shadow-button)" }}>
-        <Zap className="w-4 h-4" /> Buy Now
+        <Zap className="w-4 h-4" /> {t.buyNow}
       </button>
     </div>
   );

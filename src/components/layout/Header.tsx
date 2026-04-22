@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useLanguageStore } from "@/stores/languageStore";
 import {
   ShoppingCart, Search, User, Menu, X, ChevronDown, MapPin,
   Pill, Leaf, Thermometer, Sparkles, Activity, Heart,
@@ -80,21 +81,43 @@ export function Header() {
 
   const showDrop = dropdownOpen && (results.length > 0 || (searchQuery.length < 2 && recent.length > 0));
 
+  const { lang, setLang, t } = useLanguageStore();
+
   return (
     <header className="sticky top-0 z-40">
+      {/* ── Language switcher bar ── */}
+      <div style={{ background: "#0d1b2a", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+        <div className="max-w-[1400px] mx-auto px-3 sm:px-6 h-8 flex items-center justify-end gap-1">
+          <span className="text-[10px] sm:text-xs font-medium mr-2" style={{ color: "rgba(255,255,255,0.4)" }}>
+            {lang === "th" ? "เลือกภาษา:" : "Language:"}
+          </span>
+          {(["th", "en"] as const).map((l) => (
+            <button key={l} onClick={() => setLang(l)}
+              className="px-2.5 py-0.5 rounded text-[11px] sm:text-xs font-bold transition-all"
+              style={{
+                background: lang === l ? "var(--color-primary-600)" : "transparent",
+                color: lang === l ? "#fff" : "rgba(255,255,255,0.45)",
+                border: lang === l ? "none" : "1px solid rgba(255,255,255,0.15)",
+              }}>
+              {l === "th" ? "🇹🇭 TH" : "🇬🇧 EN"}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* ── Main bar ── */}
-      <div className="bg-white" style={{ boxShadow: "0 1px 0 var(--color-border)" }}>
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-24 flex items-center gap-4">
+      <div style={{ background: "#1a2e4a", boxShadow: "0 1px 0 rgba(255,255,255,0.1)" }} className="text-white">
+        <div className="max-w-[1400px] mx-auto px-3 sm:px-6 h-16 sm:h-20 lg:h-24 flex items-center gap-2 sm:gap-4">
 
           {/* Logo + Brand */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-1 hover:opacity-90 transition-opacity">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logoBGR.png" alt="Samui Home Clinic" style={{ height: "80px", width: "auto" }} />
+            <img src="/logoBGR.png" alt="Samui Home Clinic" style={{ height: "clamp(52px, 8vw, 80px)", width: "auto" }} />
             <div className="hidden sm:block leading-none">
               <div className="flex items-center gap-1.5 mb-0.5">
                 <span className="text-[10px] font-black tracking-tight text-white px-1.5 py-0.5 rounded"
                   style={{ background: "var(--color-primary-600)", fontFamily: "var(--font-sans)" }}>Rx</span>
-                <p className="font-bold text-sm tracking-tight" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>
+                <p className="font-bold text-sm tracking-tight" style={{ color: "#ffffff", fontFamily: "var(--font-sans)" }}>
                   SAMUI PHARMACY
                 </p>
               </div>
@@ -109,10 +132,10 @@ export function Header() {
             style={{ border: "1.5px solid var(--color-border)" }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--color-primary-400)"; (e.currentTarget as HTMLElement).style.background = "var(--color-surface-secondary)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--color-border)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
-            <MapPin className="w-4 h-4 shrink-0" style={{ color: "var(--color-primary-600)" }} />
-            <div className="leading-none">
-              <p className="text-[10px] font-medium" style={{ color: "var(--color-text-tertiary)", fontFamily: "var(--font-sans)" }}>Deliver to</p>
-              <p className="text-xs font-bold" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)" }}>Koh Samui 84140</p>
+            <MapPin className="w-5 h-5 shrink-0" style={{ color: "var(--color-primary-400)" }} />
+            <div className="leading-tight">
+              <p className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.65)", fontFamily: "var(--font-sans)" }}>{t.deliverTo}</p>
+              <p className="text-sm font-bold" style={{ color: "#ffffff", fontFamily: "var(--font-sans)" }}>{t.location}</p>
             </div>
           </div>
 
@@ -195,12 +218,12 @@ export function Header() {
 
           {/* Nav (desktop) */}
           <nav className="hidden lg:flex items-center gap-0.5 ml-2">
-            {[{ label: "Shop", href: "/shop" }, { label: "Blog", href: "/blog" }].map((l) => (
+            {[{ label: t.shop, href: "/shop" }, { label: t.blog, href: "/blog" }].map((l) => (
               <Link key={l.label} href={l.href}
                 className="px-3 py-2 text-sm font-medium rounded-lg transition-colors"
-                style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-primary-700)"; (e.currentTarget as HTMLElement).style.background = "var(--color-primary-50)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-text-secondary)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
+                style={{ color: "rgba(255,255,255,0.85)", fontFamily: "var(--font-sans)" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#ffffff"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.1)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
                 {l.label}
               </Link>
             ))}
@@ -210,25 +233,25 @@ export function Header() {
           <div className="flex items-center gap-1 ml-auto">
             {/* Mobile search toggle */}
             <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2.5 rounded-xl transition-colors md:hidden"
-              style={{ color: "var(--color-text-secondary)" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-surface-secondary)"; }}
+              style={{ color: "rgba(255,255,255,0.85)" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.1)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
               <Search className="w-5 h-5" />
             </button>
 
             <Link href="/account" className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors text-sm font-medium"
-              style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-surface-secondary)"; (e.currentTarget as HTMLElement).style.color = "var(--color-primary-700)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--color-text-secondary)"; }}>
+              style={{ color: "rgba(255,255,255,0.85)", fontFamily: "var(--font-sans)" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.color = "#ffffff"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}>
               <User className="w-5 h-5" />
-              <span className="hidden lg:block">Account <ChevronDown className="w-3 h-3 inline" /></span>
+              <span className="hidden lg:block">{t.account} <ChevronDown className="w-3 h-3 inline" /></span>
             </Link>
 
             <button onClick={openCart}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors relative text-sm font-medium"
-              style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-surface-secondary)"; (e.currentTarget as HTMLElement).style.color = "var(--color-primary-700)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--color-text-secondary)"; }}>
+              style={{ color: "rgba(255,255,255,0.85)", fontFamily: "var(--font-sans)" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.color = "#ffffff"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}>
               <div className="relative">
                 <ShoppingCart className="w-5 h-5" />
                 {cartCount > 0 && (
@@ -238,12 +261,12 @@ export function Header() {
                   </span>
                 )}
               </div>
-              <span className="hidden lg:block">Cart</span>
+              <span className="hidden lg:block">{t.cart}</span>
             </button>
 
             <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2.5 rounded-xl transition-colors lg:hidden"
-              style={{ color: "var(--color-text-secondary)" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-surface-secondary)"; }}
+              style={{ color: "rgba(255,255,255,0.85)" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.1)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
