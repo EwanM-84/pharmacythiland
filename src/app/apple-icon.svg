@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d1b2a"/>
+      <stop offset="100%" stop-color="#1a3a5c"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0891b2"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="180" height="180" rx="40" fill="url(#bg)"/>
+
+  <!-- Teal accent stripe -->
+  <rect x="0" y="0" width="180" height="22" rx="40" fill="url(#accent)"/>
+  <rect x="0" y="11" width="180" height="11" fill="url(#accent)"/>
+
+  <!-- R -->
+  <text
+    x="20"
+    y="138"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="120"
+    font-weight="700"
+    fill="#ffffff"
+    letter-spacing="-4">R</text>
+
+  <!-- x in teal -->
+  <text
+    x="103"
+    y="138"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="80"
+    font-weight="700"
+    fill="#22d3ee">x</text>
+
+  <!-- dot accent -->
+  <circle cx="162" cy="55" r="11" fill="#0891b2" opacity="0.7"/>
+</svg>
