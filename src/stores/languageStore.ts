@@ -1,10 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { translations, type Lang, type Translations } from "@/lib/translations";
+import { translations, type Lang } from "@/lib/translations";
+
+type Translation = (typeof translations)[Lang];
 
 interface LanguageStore {
   lang: Lang;
-  t: Translations;
+  t: Translation;
   setLang: (lang: Lang) => void;
 }
 
