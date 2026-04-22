@@ -207,7 +207,7 @@ export function getStaffPicks(limit = 8): Product[] {
 }
 
 export function getSeasonalEssentials(limit = 8): Product[] {
-  return mockProducts.filter((p) => ["cat-3", "cat-11", "cat-2", "cat-9"].includes(p.category_id)).slice(0, limit);
+  return mockProducts.filter((p) => p.category_id !== null && ["cat-3", "cat-11", "cat-2", "cat-9"].includes(p.category_id)).slice(0, limit);
 }
 
 export function getRelatedProducts(product: Product, limit = 4): Product[] {
