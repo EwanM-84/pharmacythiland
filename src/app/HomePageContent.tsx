@@ -76,15 +76,15 @@ export function HomePageContent({ categories, bestSellers, featured, trending, f
 
       {/* ── Quick filter pills ── */}
       <section style={{ background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)", boxShadow: "var(--shadow-xs)" }}>
-        <div className="max-w-[1400px] mx-auto px-3 sm:px-6 py-2.5 flex gap-2 justify-between overflow-x-auto scrollbar-hide">
+        <div className="max-w-[1400px] mx-auto px-3 sm:px-6 py-2.5 flex gap-2 overflow-x-auto scrollbar-hide">
           {[
-            { label: t.todaysDeals, href: "/shop", icon: <Tag className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" /> },
-            { label: t.bestSellers, href: "/shop", icon: <Star className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" /> },
-            { label: t.newArrivals, href: "/shop", icon: <Package className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" /> },
-            { label: t.expressDelivery, href: "/shop", icon: <Zap className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" /> },
+            { label: t.todaysDeals, href: "/shop", icon: <Tag className="w-4 h-4 shrink-0" /> },
+            { label: t.bestSellers, href: "/shop", icon: <Star className="w-4 h-4 shrink-0" /> },
+            { label: t.newArrivals, href: "/shop", icon: <Package className="w-4 h-4 shrink-0" /> },
+            { label: t.expressDelivery, href: "/shop", icon: <Zap className="w-4 h-4 shrink-0" /> },
           ].map((d) => (
             <Link key={d.label} href={d.href}
-              className="pill-hover flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap border min-h-[40px]"
+              className="pill-hover shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap border min-h-[40px]"
               style={{ borderColor: "var(--color-border)", color: "var(--color-text-secondary)" }}>
               {d.icon}{d.label}
             </Link>
@@ -122,16 +122,16 @@ export function HomePageContent({ categories, bestSellers, featured, trending, f
         {/* ── Categories ── */}
         <section>
           <SectionHeader title={t.shopByCategory} />
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-2 sm:gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-2 sm:gap-3">
             {categories.slice(0, 7).map((cat) => (
               <Link key={cat.id} href={`/shop/${cat.slug}`}
-                className="cat-card-hover rounded-xl p-3 sm:p-3.5 flex flex-col items-center gap-2 text-center group"
+                className="cat-card-hover rounded-xl p-2.5 sm:p-3.5 flex flex-col items-center gap-1.5 text-center group"
                 style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", boxShadow: "var(--shadow-card)" }}>
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center"
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center"
                   style={{ background: "var(--color-surface-tertiary)", color: "var(--color-primary-600)" }}>
                   {categoryIcons[cat.slug] ?? <Pill className="w-5 h-5" />}
                 </div>
-                <span className="text-[11px] sm:text-[13px] font-semibold leading-tight"
+                <span className="text-[10px] sm:text-[13px] font-semibold leading-tight"
                   style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-sans)" }}>
                   {t.categories[cat.slug as keyof typeof t.categories] ?? cat.name}
                 </span>

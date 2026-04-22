@@ -112,7 +112,7 @@ export function Header() {
           {/* Logo + Brand */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-1 hover:opacity-90 transition-opacity">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logoBGR.png" alt="Samui Home Clinic" style={{ height: "clamp(52px, 8vw, 80px)", width: "auto" }} />
+            <img src="/logoBGR.png" alt="Samui Home Clinic" style={{ height: "clamp(44px, 10vw, 76px)", width: "auto" }} />
             <div className="hidden sm:block leading-none">
               <div className="flex items-center gap-1.5 mb-0.5">
                 <span className="text-[10px] font-black tracking-tight text-white px-1.5 py-0.5 rounded"

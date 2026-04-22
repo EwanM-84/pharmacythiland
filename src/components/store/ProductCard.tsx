@@ -196,9 +196,9 @@ export function ProductCard({ product, layout = "grid" }: ProductCardProps) {
         )}
 
         {/* Price */}
-        <div className="mb-2">
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-lg font-bold" style={{ color: "var(--color-text)" }}>
+        <div className="mb-1.5">
+          <div className="flex items-baseline gap-1">
+            <span className="text-base font-bold" style={{ color: "var(--color-text)" }}>
               ฿{product.price.toLocaleString()}
             </span>
             {product.compare_price && product.compare_price > product.price && (
@@ -208,13 +208,13 @@ export function ProductCard({ product, layout = "grid" }: ProductCardProps) {
             )}
           </div>
           {discount && (
-            <p className="text-xs" style={{ color: "#b91c1c" }}>
-              You save ฿{(product.compare_price! - product.price).toLocaleString()}
+            <p className="text-[11px]" style={{ color: "#b91c1c" }}>
+              -{discount}%
             </p>
           )}
         </div>
 
-        <p className="text-[11px] font-medium mb-2.5" style={{ color: "#15803d" }}>
+        <p className="text-[10px] font-medium mb-2" style={{ color: "#15803d" }}>
           {product.stock_qty > 0 && product.stock_qty <= product.low_stock_threshold
             ? t.onlyLeft(product.stock_qty)
             : product.stock_qty > 0
@@ -224,13 +224,13 @@ export function ProductCard({ product, layout = "grid" }: ProductCardProps) {
 
         {product.stock_qty > 0 && (
           <button onClick={handleAddToCart}
-            className="w-full py-2.5 min-h-[44px] rounded-lg text-sm font-semibold transition-all active:scale-95 flex items-center justify-center gap-1.5 text-white touch-manipulation"
+            className="w-full min-h-[44px] rounded-lg text-xs sm:text-sm font-semibold transition-all active:scale-95 flex items-center justify-center gap-1 sm:gap-1.5 text-white touch-manipulation py-2"
             style={{ background: "var(--color-primary-600)", boxShadow: "var(--shadow-button)" }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-700)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-600)"; }}
             aria-label={`Add ${product.name} to cart`}>
-            <Plus className="w-4 h-4" />
-            {t.addToCart}
+            <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+            <span className="truncate">{t.addToCart}</span>
           </button>
         )}
       </div>
