@@ -88,7 +88,7 @@ export function Header() {
 
           {/* Logo + Brand */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-1 hover:opacity-90 transition-opacity">
-            <Image src="/logo-white.png" alt="Samui Home Clinic"
+            <Image src="/logoBGR.png" alt="Samui Home Clinic"
               width={52} height={52}
               style={{ width: "auto", height: "52px" }}
               priority />
