@@ -89,8 +89,8 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="shrink-0 mr-2 hover:opacity-90 transition-opacity">
             <Image src="/logo-white.png" alt="Samui Home Clinic"
-              width={120} height={120}
-              className="h-14 w-auto"
+              width={56} height={56}
+              style={{ width: "auto", height: "56px" }}
               priority />
           </Link>
 
