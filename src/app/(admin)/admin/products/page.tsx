@@ -4,6 +4,8 @@ import { formatPrice, computeMargin } from "@/lib/utils";
 import type { Product } from "@/types";
 import { Plus, Upload, Search } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   searchParams: Promise<{ q?: string; low_stock?: string }>;
 }

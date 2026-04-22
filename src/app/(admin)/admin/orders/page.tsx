@@ -4,6 +4,8 @@ import { formatPrice, formatDate } from "@/lib/utils";
 import { OrderStatusBadge } from "@/components/ui/badge";
 import type { Order } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   searchParams: Promise<{ status?: string; q?: string }>;
 }

@@ -6,6 +6,8 @@ import { OrderStatusBadge } from "@/components/ui/badge";
 import type { Order } from "@/types";
 import { ArrowLeft, MapPin, Package, Truck, Store } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ id: string }>;
 }

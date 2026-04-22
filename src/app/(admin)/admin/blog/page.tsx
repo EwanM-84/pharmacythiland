@@ -4,6 +4,8 @@ import { BookOpen, Plus } from "lucide-react";
 import type { BlogPost } from "@/types";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminBlogPage() {
   const supabase = createAdminClient();
   const { data: posts } = await supabase

@@ -7,6 +7,8 @@ import type { Order, Profile, LoyaltyEvent } from "@/types";
 import { ShoppingBag, MapPin, Coins, User, LogOut } from "lucide-react";
 import { SignOutButton } from "./SignOutButton";
 
+export const dynamic = "force-dynamic";
+
 async function getAccountData(userId: string) {
   const supabase = createAdminClient();
   const [profileRes, ordersRes, loyaltyRes] = await Promise.all([

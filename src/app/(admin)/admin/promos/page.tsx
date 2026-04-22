@@ -5,6 +5,8 @@ import type { PromoCode } from "@/types";
 import { NewPromoForm } from "./NewPromoForm";
 import { DeletePromoButton } from "./DeletePromoButton";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminPromosPage() {
   const supabase = createAdminClient();
   const { data: promos } = await supabase

@@ -4,6 +4,8 @@ import Image from "next/image";
 import { createServerClient, createAdminClient } from "@/lib/supabase/server";
 import { LayoutDashboard, Package, ShoppingBag, Users, BarChart3, Settings, BookOpen, Star, Tag } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Products", href: "/admin/products", icon: Package },

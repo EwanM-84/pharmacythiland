@@ -2,6 +2,8 @@ import { createAdminClient } from "@/lib/supabase/server";
 import { formatPrice } from "@/lib/utils";
 import { RevenueChart } from "./RevenueChart";
 
+export const dynamic = "force-dynamic";
+
 async function getAnalyticsData() {
   const supabase = createAdminClient();
 

@@ -4,6 +4,8 @@ import { Star } from "lucide-react";
 import type { Review } from "@/types";
 import { ReviewActions } from "./ReviewActions";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminReviewsPage() {
   const supabase = createAdminClient();
   const { data: reviews } = await supabase

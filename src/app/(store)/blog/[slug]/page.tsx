@@ -1,4 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
 import { formatDate } from "@/lib/utils";
 import type { BlogPost } from "@/types";
 import Link from "next/link";

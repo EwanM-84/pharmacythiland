@@ -3,6 +3,8 @@ import { formatDate, formatPrice } from "@/lib/utils";
 import { Search, Users } from "lucide-react";
 import type { Profile } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   searchParams: Promise<{ q?: string }>;
 }
