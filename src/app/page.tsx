@@ -49,7 +49,7 @@ export default function HomePage() {
             <Image src="/header.png" alt="" fill className="object-cover object-center" priority />
             {/* Dark overlay for text legibility */}
             <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(10,37,64,0.82) 0%, rgba(10,37,64,0.55) 60%, rgba(10,37,64,0.15) 100%)" }} />
-            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-36 relative z-10 flex items-center justify-between gap-8" style={{ minHeight: "420px" }}>
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-16 relative z-10 flex items-center justify-between gap-8" style={{ minHeight: "600px" }}>
               {/* Text */}
               <div className="max-w-xl">
                 <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-5 text-xs font-bold uppercase tracking-widest"
@@ -79,7 +79,7 @@ export default function HomePage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logoBGR.png" alt="Samui Home Clinic"
                 className="hidden lg:block shrink-0"
-                style={{ height: "420px", width: "auto" }} />
+                style={{ height: "600px", width: "auto" }} />
             </div>
           </section>
 
