@@ -75,7 +75,7 @@ export default function HomePage() {
                 </div>
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logoBGR.png" alt="" className="hidden lg:block" style={{ height: "400px", width: "400px" }} />
+              <img src="/logoBGR.png" alt="" className="hidden lg:block" style={{ height: "800px", width: "800px" }} />
             </div>
           </section>
 
