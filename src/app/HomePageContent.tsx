@@ -65,14 +65,13 @@ export function HomePageContent({ categories, bestSellers, featured, trending, f
     <div className="min-h-screen" style={{ background: "var(--color-surface-secondary)" }}>
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: "clamp(260px, 55vw, 580px)" }}>
         <Image src="/herox2.png" alt="" fill className="object-cover object-center" priority />
         <div className="absolute inset-0" style={{ background: "rgba(5,15,30,0.82)" }} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logoBGR.png" alt="Samui Home Clinic"
-          className="absolute hidden lg:block z-20"
-          style={{ height: "545px", width: "545px", left: "50%", top: "50%", transform: "translateX(-50%) translateY(-50%)" }} />
-        <div className="relative z-10" style={{ minHeight: "clamp(280px, 50vw, 560px)" }} />
+          className="relative z-20"
+          style={{ height: "clamp(180px, 40vw, 520px)", width: "auto" }} />
       </section>
 
       {/* ── Quick filter pills ── */}
