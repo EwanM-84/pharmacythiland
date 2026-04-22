@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
   ShoppingCart, Search, User, Menu, X, ChevronDown,
@@ -86,19 +87,10 @@ export function Header() {
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0 group mr-2">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
-              style={{ background: "var(--color-primary-600)" }}>
-              <span className="text-white font-bold text-sm tracking-tight" style={{ fontFamily: "var(--font-sans)" }}>Rx</span>
-            </div>
-            <div className="hidden sm:block leading-none">
-              <p className="font-bold text-sm tracking-tight" style={{ color: "var(--color-text)", fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }}>
-                SAMUI HOME CLINIC
-              </p>
-              <p className="text-[10px] font-semibold tracking-[0.15em] uppercase" style={{ color: "var(--color-primary-600)" }}>
-                Pharmacy
-              </p>
-            </div>
+          <Link href="/" className="shrink-0 group mr-2 transition-opacity hover:opacity-90">
+            <Image src="/logo.png" alt="Samui Home Clinic" width={130} height={84}
+              className="rounded-xl"
+              priority />
           </Link>
 
           {/* Search */}
