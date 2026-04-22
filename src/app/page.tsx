@@ -77,9 +77,12 @@ export default function HomePage() {
               </div>
               {/* Logo on right side of hero */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logoBGR.png" alt="Samui Home Clinic"
-                className="hidden lg:block shrink-0"
-                style={{ height: "600px", width: "auto" }} />
+              {/* Crop the PNG whitespace — show only the graphic centre */}
+              <div className="hidden lg:block shrink-0 overflow-hidden rounded-2xl"
+                style={{ width: "380px", height: "380px" }}>
+                <img src="/logoBGR.png" alt="Samui Home Clinic"
+                  style={{ width: "950px", height: "950px", marginTop: "-240px", marginLeft: "-285px" }} />
+              </div>
             </div>
           </section>
 
