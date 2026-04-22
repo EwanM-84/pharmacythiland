@@ -47,10 +47,14 @@ export default function HomePage() {
           <section className="relative overflow-hidden">
             {/* Background photo */}
             <Image src="/header.png" alt="" fill className="object-cover object-center" priority />
-            {/* Dark overlay for text legibility */}
-            <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(10,37,64,0.82) 0%, rgba(10,37,64,0.55) 60%, rgba(10,37,64,0.15) 100%)" }} />
+            {/* Dark overlay — darker on right so text is readable */}
+            <div className="absolute inset-0" style={{ background: "linear-gradient(270deg, rgba(10,37,64,0.85) 0%, rgba(10,37,64,0.55) 50%, rgba(10,37,64,0.15) 100%)" }} />
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-16 relative z-10 flex items-center justify-between gap-8" style={{ minHeight: "600px" }}>
-              {/* Text */}
+              {/* Logo on LEFT */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logoBGR.png" alt="Samui Home Clinic" className="hidden lg:block shrink-0" style={{ width: "500px", height: "500px" }} />
+
+              {/* Text on RIGHT */}
               <div className="max-w-xl">
                 <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-5 text-xs font-bold uppercase tracking-widest"
                   style={{ background: "rgba(8,145,178,0.25)", color: "var(--color-primary-200)", border: "1px solid rgba(8,145,178,0.4)" }}>
@@ -75,10 +79,6 @@ export default function HomePage() {
                   </Link>
                 </div>
               </div>
-              {/* Logo on right side of hero */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logoBGR.png" alt="Samui Home Clinic" className="hidden lg:block" style={{ width: "350px", height: "350px" }} />
             </div>
           </section>
 
