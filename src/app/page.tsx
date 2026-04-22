@@ -49,7 +49,7 @@ export default function HomePage() {
             <Image src="/header.png" alt="" fill className="object-cover object-center" priority />
             {/* Dark overlay — darker on left so text is readable */}
             <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(10,37,64,0.85) 0%, rgba(10,37,64,0.55) 50%, rgba(10,37,64,0.15) 100%)" }} />
-            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-20 sm:py-28 relative z-10" style={{ minHeight: "420px" }}>
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-20 sm:py-28 relative z-10 flex items-center justify-between" style={{ minHeight: "420px" }}>
               <div className="max-w-2xl">
                 <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-5 text-xs font-bold uppercase tracking-widest"
                   style={{ background: "rgba(8,145,178,0.25)", color: "var(--color-primary-200)", border: "1px solid rgba(8,145,178,0.4)" }}>
@@ -74,6 +74,8 @@ export default function HomePage() {
                   </Link>
                 </div>
               </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logoBGR.png" alt="" className="hidden lg:block" style={{ height: "400px", width: "400px" }} />
             </div>
           </section>
 
