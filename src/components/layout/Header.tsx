@@ -88,13 +88,10 @@ export function Header() {
 
           {/* Logo */}
           <Link href="/" className="shrink-0 mr-2 hover:opacity-90 transition-opacity">
-            <div className="h-11 rounded-xl overflow-hidden"
-              style={{ background: "#0d2e24", aspectRatio: "780/500" }}>
-              <Image src="/logo.png" alt="Samui Home Clinic"
-                width={172} height={110}
-                className="w-full h-full object-cover"
-                priority />
-            </div>
+            <Image src="/logo-white.png" alt="Samui Home Clinic"
+              width={120} height={120}
+              className="h-14 w-auto"
+              priority />
           </Link>
 
           {/* Search */}
