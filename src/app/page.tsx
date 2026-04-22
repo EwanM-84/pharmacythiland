@@ -79,7 +79,7 @@ export default function HomePage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logoBGR.png" alt="Samui Home Clinic"
                 className="hidden lg:block shrink-0"
-                style={{ height: "200px", width: "auto" }} />
+                style={{ height: "420px", width: "auto" }} />
             </div>
           </section>
 
