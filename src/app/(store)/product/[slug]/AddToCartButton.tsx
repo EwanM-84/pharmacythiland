@@ -46,8 +46,10 @@ export function AddToCartButton({ product }: { product: Product }) {
         </div>
 
         <button onClick={handleAdd}
-          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white text-sm transition-all hover:brightness-105 active:scale-97"
-          style={{ background: "var(--color-ios-blue)" }}>
+          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white text-sm transition-all active:scale-97"
+          style={{ background: "var(--color-primary-600)", boxShadow: "var(--shadow-button)" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-700)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-600)"; }}>
           <ShoppingCart className="w-4 h-4" /> Add to Cart
         </button>
       </div>

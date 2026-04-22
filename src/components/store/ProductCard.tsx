@@ -222,10 +222,10 @@ export function ProductCard({ product, layout = "grid" }: ProductCardProps) {
 
         {product.stock_qty > 0 && (
           <button onClick={handleAddToCart}
-            className="w-full py-2 rounded-lg text-sm font-semibold transition-all active:scale-95 flex items-center justify-center gap-1.5"
-            style={{ background: "linear-gradient(180deg,#FFD814 0%,#F5A623 100%)", color: "#111", border: "1px solid #C8960C", boxShadow: "0 1px 3px rgba(0,0,0,0.12)" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.filter = "brightness(0.96)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.filter = "none"; }}
+            className="w-full py-2 rounded-lg text-sm font-semibold transition-all active:scale-95 flex items-center justify-center gap-1.5 text-white"
+            style={{ background: "var(--color-primary-600)", boxShadow: "var(--shadow-button)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-700)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-600)"; }}
             aria-label={`Add ${product.name} to cart`}>
             <Plus className="w-4 h-4" />
             Add to Cart
