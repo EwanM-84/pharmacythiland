@@ -84,12 +84,12 @@ export function Header() {
     <header className="sticky top-0 z-40">
       {/* ── Main bar ── */}
       <div className="bg-white" style={{ boxShadow: "0 1px 0 var(--color-border)" }}>
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-24 flex items-center gap-4">
 
           {/* Logo + Brand */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-1 hover:opacity-90 transition-opacity">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logoBGR.png" alt="Samui Home Clinic" style={{ height: "52px", width: "auto" }} />
+            <img src="/logoBGR.png" alt="Samui Home Clinic" style={{ height: "80px", width: "auto" }} />
             <div className="hidden sm:block leading-none">
               <div className="flex items-center gap-1.5 mb-0.5">
                 <span className="text-[10px] font-black tracking-tight text-white px-1.5 py-0.5 rounded"
