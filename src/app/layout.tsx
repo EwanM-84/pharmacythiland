@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
-import { DM_Sans, Playfair_Display } from "next/font/google";
+import { Roboto } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-const dmSans = DM_Sans({
+const roboto = Roboto({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-roboto",
+  weight: ["300", "400", "500", "700", "900"],
   display: "swap",
 });
 
@@ -41,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${playfair.variable} h-full antialiased`}>
+    <html lang="en" className={`${roboto.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-(--color-surface-secondary)">
         {children}
         <Toaster
