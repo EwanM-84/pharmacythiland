@@ -85,10 +85,8 @@ export default function HomePage() {
                 { label: "Express Delivery", href: "/shop", icon: <Zap className="w-4 h-4" /> },
               ].map((d) => (
                 <Link key={d.label} href={d.href}
-                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors border"
-                  style={{ borderColor: "var(--color-border)", color: "var(--color-text-secondary)" }}
-                  onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "var(--color-primary-400)"; el.style.background = "var(--color-primary-50)"; el.style.color = "var(--color-primary-700)"; }}
-                  onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "var(--color-border)"; el.style.background = "transparent"; el.style.color = "var(--color-text-secondary)"; }}>
+                  className="pill-hover flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border"
+                  style={{ borderColor: "var(--color-border)", color: "var(--color-text-secondary)" }}>
                   {d.icon}{d.label}
                 </Link>
               ))}
@@ -134,14 +132,12 @@ export default function HomePage() {
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-3">
                 {mockCategories.map((cat) => (
                   <Link key={cat.id} href={`/shop/${cat.slug}`}
-                    className="rounded-xl p-3 flex flex-col items-center gap-2 text-center transition-all group"
+                    className="cat-card-hover rounded-xl p-3 flex flex-col items-center gap-2 text-center group"
                     style={{
                       background: "var(--color-surface)",
                       border: "1px solid var(--color-border)",
                       boxShadow: "var(--shadow-card)",
-                    }}
-                    onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "var(--color-primary-300)"; el.style.boxShadow = "var(--shadow-card-hover)"; el.style.transform = "translateY(-2px)"; }}
-                    onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "var(--color-border)"; el.style.boxShadow = "var(--shadow-card)"; el.style.transform = "none"; }}>
+                    }}>
                     <div className="w-9 h-9 rounded-xl flex items-center justify-center"
                       style={{ background: "var(--color-surface-tertiary)", color: "var(--color-primary-600)" }}>
                       {categoryIcons[cat.slug] ?? <Pill className="w-5 h-5" />}
@@ -163,10 +159,8 @@ export default function HomePage() {
                 { bg: "linear-gradient(135deg, #d97706 0%, #fbbf24 100%)", title: "Baby Essentials", sub: "Free delivery", href: "/shop/baby", icon: <Baby className="w-16 h-16 opacity-20" /> },
               ].map((card) => (
                 <Link key={card.title} href={card.href}
-                  className="rounded-2xl overflow-hidden p-6 flex items-center justify-between transition-transform"
-                  style={{ background: card.bg, minHeight: "120px", boxShadow: "var(--shadow-card-hover)" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1.015)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "none"; }}>
+                  className="deal-card-hover rounded-2xl overflow-hidden p-6 flex items-center justify-between"
+                  style={{ background: card.bg, minHeight: "120px", boxShadow: "var(--shadow-card-hover)" }}>
                   <div>
                     <p className="text-white/75 text-xs font-bold uppercase tracking-widest mb-1">{card.sub}</p>
                     <p className="text-white text-xl font-extrabold leading-tight" style={{ fontFamily: "var(--font-display)" }}>{card.title}</p>

@@ -356,3 +356,27 @@ h3 { font-size: clamp(1.125rem, 2vw, 1.5rem); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .fade-in-up { animation: fadeInUp 0.3s ease forwards; }
+
+/* ── CSS-only hover helpers (usable in Server Components) ── */
+.pill-hover {
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+.pill-hover:hover {
+  border-color: var(--color-primary-400) !important;
+  background: var(--color-primary-50) !important;
+  color: var(--color-primary-700) !important;
+}
+
+.cat-card-hover {
+  transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+.cat-card-hover:hover {
+  border-color: var(--color-primary-300) !important;
+  box-shadow: var(--shadow-card-hover) !important;
+  transform: translateY(-2px);
+}
+
+.deal-card-hover {
+  transition: transform 200ms ease;
+}
+.deal-card-hover:hover { transform: scale(1.015); }
