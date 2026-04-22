@@ -52,7 +52,7 @@ export default function HomePage() {
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-36 relative z-10" style={{ minHeight: "420px" }}>
               <div className="max-w-2xl">
                 <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-5 text-xs font-bold uppercase tracking-widest"
-                  style={{ background: "rgba(255,216,20,0.15)", color: "#FFD814", border: "1px solid rgba(255,216,20,0.3)" }}>
+                  style={{ background: "rgba(8,145,178,0.25)", color: "var(--color-primary-200)", border: "1px solid rgba(8,145,178,0.4)" }}>
                   <Zap className="w-3.5 h-3.5" /> New Season Essentials
                 </div>
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight mb-4"
@@ -64,8 +64,8 @@ export default function HomePage() {
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Link href="/shop/vitamins"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:brightness-95"
-                    style={{ background: "#FFD814", color: "#111", border: "1px solid #C8960C", boxShadow: "0 4px 16px rgba(0,0,0,0.25)" }}>
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-all hover:brightness-110"
+                    style={{ background: "var(--color-primary-500)", boxShadow: "0 4px 16px rgba(8,145,178,0.4)" }}>
                     Shop Vitamins <ChevronRight className="w-4 h-4" />
                   </Link>
                   <Link href="/shop"
@@ -202,7 +202,7 @@ export default function HomePage() {
                   </h3>
                   <Link href="/shop?prescription=true"
                     className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold hover:brightness-95 transition-all"
-                    style={{ background: "#FFD814", color: "#111", border: "1px solid #C8960C" }}>
+                    style={{ background: "var(--color-primary-500)", color: "#fff" }}>
                     Shop Prescription Meds <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -220,7 +220,7 @@ export default function HomePage() {
                   </h3>
                   <Link href="/shop"
                     className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold hover:brightness-95 transition-all"
-                    style={{ background: "#FFD814", color: "#111", border: "1px solid #C8960C" }}>
+                    style={{ background: "var(--color-primary-500)", color: "#fff" }}>
                     Start Shopping <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>

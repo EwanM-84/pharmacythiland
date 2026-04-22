@@ -488,7 +488,7 @@ export default function CheckoutPage() {
                 </button>
                 <button onClick={placeOrder}
                   className="flex-[3] py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:brightness-95"
-                  style={{ background: "linear-gradient(180deg,#FFD814 0%,#F5A623 100%)", color: "#111", border: "1px solid #C8960C" }}>
+                  style={{ background: "var(--color-primary-600)", color: "#fff" }}>
                   <Lock className="w-4 h-4" /> Place Order — ฿{total.toLocaleString()}
                 </button>
               </div>

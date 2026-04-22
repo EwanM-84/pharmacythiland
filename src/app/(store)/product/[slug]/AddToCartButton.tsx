@@ -56,7 +56,7 @@ export function AddToCartButton({ product }: { product: Product }) {
 
       <button onClick={handleBuyNow}
         className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm transition-all hover:brightness-95 active:scale-97"
-        style={{ background: "linear-gradient(180deg,#FFD814 0%,#F5A623 100%)", color: "#111", border: "1px solid #C8960C", boxShadow: "0 1px 2px rgba(0,0,0,0.15)" }}>
+        style={{ background: "var(--color-primary-500)", color: "#fff", boxShadow: "var(--shadow-button)" }}>
         <Zap className="w-4 h-4" /> Buy Now
       </button>
     </div>
