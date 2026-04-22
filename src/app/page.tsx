@@ -53,7 +53,7 @@ export default function HomePage() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logoBGR.png" alt="Samui Home Clinic"
               className="absolute hidden lg:block z-20"
-              style={{ height: "1350px", width: "1350px", left: "840px", top: "50%", transform: "translateY(-50%)" }} />
+              style={{ height: "1350px", width: "1350px", left: "756px", top: "50%", transform: "translateY(-50%)" }} />
 
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-20 sm:py-28 relative z-10" style={{ minHeight: "420px" }}>
               <div className="max-w-2xl">
